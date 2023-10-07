@@ -1,0 +1,14 @@
+.box {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+}
+
+.info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-self: flex-start;
+    padding: 2em 4em;
+    font-size: 2rem;
+}

@@ -1,19 +1,24 @@
 @use 'variables' as var;
 
-.start-screen-container {
+.gameover-screen-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-.start-screen {
+.gameover-screen {
     font-size: 2rem;
-    width: 400px;
+    width: 600px;
     text-align: center;
     background-color: var.$clr-start-screen;
     border-radius: 10px;
     padding: 1em;
+
+    h2 {
+        margin-top: 0.5em;
+        font-size: 2rem;
+    }
 
     button {
         font-size: inherit;
@@ -21,7 +26,7 @@
 
         background-color: var.$clr-background;
 
-        margin-top: 1em;
+        margin-top: 2em;
         padding: 0.3em 1.5em;
 
         border: none;
