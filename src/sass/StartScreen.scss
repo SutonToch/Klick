@@ -1,0 +1,26 @@
+@use 'variables' as var;
+
+.start-screen {
+    font-size: 2rem;
+    width: 400px;
+    text-align: center;
+    background-color: var.$clr-start-screen;
+    border-radius: 10px;
+    padding: 1em;
+
+    button {
+        font-size: inherit;
+        color: var.$clr-font-color;
+
+        background-color: var.$clr-background;
+
+        margin-top: 1em;
+        padding: 0.3em 1.5em;
+
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    
+}

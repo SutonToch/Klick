@@ -1,0 +1,28 @@
+@use 'variables' as var;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+:root {  
+    font-family: sans-serif;
+  
+    color-scheme: light dark;
+    color: var.$clr-font-color;
+    background-color: var.$clr-background;
+  
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+  }
