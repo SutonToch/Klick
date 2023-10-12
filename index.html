@@ -3,10 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/css/index.css">
+    <script src="src/index.js" type="module"></script>
     <title>Klick</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Start Screen -->
+    <div class="start-screen-container flex">
+      <div class="start-screen">
+        <h1>Klick</h1>
+        <button class="start-game-btn">Start Game</button>
+      </div>
+    </div>
+    <!-- Game Over Screen -->
+    <div class="gameover-screen-container hide">
+      <div class="gameover-screen">
+          <h1>Game Over</h1>
+          <h2 class="end-points"></h2>
+          <button class="start-new-game-btn">New Game</button>
+      </div>
+    </div>
+    <header class="info-bar hide">
+      <p class="hp"></p>
+      <p class="points"></p>
+    </header>
+    <main class="game-screen hide">
+      <!-- Generated Boxes are inserted here -->
+    </main>
   </body>
 </html>
