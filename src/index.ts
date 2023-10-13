@@ -10,9 +10,11 @@ const endPointsElement = document.getElementsByClassName("end-points")[0]
 const startGameBtn = document.getElementsByClassName("start-game-btn")[0]
 const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0]
 
+
 let hp : number = 3
 let points : number = 0
 let worker : Worker | undefined
+
 
 // EVENT LISTENERS
 startGameBtn.addEventListener("click", () => {
@@ -30,7 +32,6 @@ startGameBtn.addEventListener("click", () => {
 startNewGameBtn.addEventListener("click", () => {
     hp = 3
     points = 0
-    worker = undefined
 
     gameoverScreenContainer.classList.remove("flex")
     infoBar.classList.remove("hide")
@@ -42,6 +43,7 @@ startNewGameBtn.addEventListener("click", () => {
 
     setupGame()
 })
+
 
 
 function setupGame() {
@@ -82,6 +84,7 @@ function generateBox(count: string) {
     const box = document.createElement("div")
     box.classList.add("box")
 
+    //maybe the id is not necessary, but I'll leave it in for now
     box.setAttribute("id", count.toString())
 
     box.style.top = (window.innerHeight*0.1 + Math.floor(Math.random()*(window.innerHeight*0.8))).toString() + "px"
@@ -108,10 +111,8 @@ function generateBox(count: string) {
 
     gameScreen.appendChild(box)
 
-    const boxElement = document.getElementById(count.toString())
-    if(boxElement) {
-        boxElement.style.animation = "fadeOut linear 5s"
-    }
+    //works even though the box is already placed on the dom, which is pleasantly suprising
+    box.style.animation = "fadeOut linear 5s"
 }
 
 function gameOver() {
@@ -125,6 +126,8 @@ function gameOver() {
 
     endPointsElement.textContent = `Points: ${points}`
 
-    worker?.terminate()
-    gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
+    stopWorker()
+    
+    // this wont work, because i haven't cleared the Interval of that child yet
+    // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
 }

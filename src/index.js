@@ -23,7 +23,6 @@ startGameBtn.addEventListener("click", function () {
 startNewGameBtn.addEventListener("click", function () {
     hp = 3;
     points = 0;
-    worker = undefined;
     gameoverScreenContainer.classList.remove("flex");
     infoBar.classList.remove("hide");
     gameScreen.classList.remove("hide");
@@ -64,6 +63,7 @@ function stopWorker() {
 function generateBox(count) {
     var box = document.createElement("div");
     box.classList.add("box");
+    //maybe the id is not necessary, but I'll leave it in for now
     box.setAttribute("id", count.toString());
     box.style.top = (window.innerHeight * 0.1 + Math.floor(Math.random() * (window.innerHeight * 0.8))).toString() + "px";
     box.style.left = (window.innerWidth * 0.1 + Math.floor(Math.random() * (window.innerWidth * 0.8))).toString() + "px";
@@ -81,10 +81,8 @@ function generateBox(count) {
         gameScreen.removeChild(box);
     });
     gameScreen.appendChild(box);
-    var boxElement = document.getElementById(count.toString());
-    if (boxElement) {
-        boxElement.style.animation = "fadeOut linear 5s";
-    }
+    //works even though the box is already placed on the dom, which is pleasantly suprising
+    box.style.animation = "fadeOut linear 5s";
 }
 function gameOver() {
     infoBar.classList.remove("flex");
@@ -94,6 +92,7 @@ function gameOver() {
     gameScreen.classList.add("hide");
     gameoverScreenContainer.classList.add("flex");
     endPointsElement.textContent = "Points: ".concat(points);
-    worker === null || worker === void 0 ? void 0 : worker.terminate();
-    gameScreen.childNodes.forEach(function (node) { return gameScreen.removeChild(node); });
+    stopWorker();
+    // this wont work, because i haven't cleared the Interval of that child yet
+    // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
 }
