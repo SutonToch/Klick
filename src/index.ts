@@ -53,7 +53,7 @@ function setupGame() {
 }
 
 function updateHP(textContent : string) {
-    hp = Number(textContent.slice(-1))
+    hp = Number(textContent.replace("HP: ", ""))
     hpElement.textContent = textContent
     if(hp == 0) {
         gameOver()
@@ -61,7 +61,7 @@ function updateHP(textContent : string) {
 }
 
 function updatePoints(textContent : string) {
-    points = Number(textContent.slice(-1))
+    points = Number(textContent.replace("Points: ", ""))
     pointsElement.textContent = textContent
 }
 
@@ -127,7 +127,7 @@ function gameOver() {
     endPointsElement.textContent = `Points: ${points}`
 
     stopWorker()
-    
+
     // this wont work, because i haven't cleared the Interval of that child yet
     // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
 }

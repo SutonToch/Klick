@@ -37,14 +37,14 @@ function setupGame() {
     startWorker();
 }
 function updateHP(textContent) {
-    hp = Number(textContent.slice(-1));
+    hp = Number(textContent.replace("HP: ", ""));
     hpElement.textContent = textContent;
     if (hp == 0) {
         gameOver();
     }
 }
 function updatePoints(textContent) {
-    points = Number(textContent.slice(-1));
+    points = Number(textContent.replace("Points: ", ""));
     pointsElement.textContent = textContent;
 }
 function startWorker() {
