@@ -2,6 +2,7 @@
 const startScreenContainer = document.getElementsByClassName("start-screen-container")[0];
 const gameScreen = document.getElementsByClassName("game-screen")[0];
 const gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0];
+const settingsBar = document.getElementsByClassName("settings-bar")[0];
 const hpElement = document.getElementsByClassName("hp")[0];
 const pointsElement = document.getElementsByClassName("points")[0];
 const endPointsElement = document.getElementsByClassName("end-points")[0];
@@ -18,7 +19,7 @@ let loseHPAudio;
 let muted = true;
 // EVENT LISTENERS
 window.addEventListener("load", () => {
-    backgroundAudio = new Audio("./src/assets/seven-years-pixabay-Keyframe_Audio.mp3");
+    backgroundAudio = new Audio("./src/assets/seven-years-pixabay-keyframe_audio-2.mp3");
     backgroundAudio.volume = 0;
     backgroundAudio.loop = true;
     gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3");
@@ -30,8 +31,10 @@ window.addEventListener("load", () => {
 startGameBtn.addEventListener("click", () => {
     startScreenContainer.classList.remove("flex");
     gameScreen.classList.remove("hide");
+    settingsBar.classList.remove("hide");
     startScreenContainer.classList.add("hide");
     gameScreen.classList.add("flex");
+    settingsBar.classList.add("flex");
     setupGame();
 });
 startNewGameBtn.addEventListener("click", () => {
@@ -39,8 +42,10 @@ startNewGameBtn.addEventListener("click", () => {
     points = 0;
     gameoverScreenContainer.classList.remove("flex");
     gameScreen.classList.remove("hide");
+    settingsBar.classList.remove("hide");
     gameoverScreenContainer.classList.add("hide");
     gameScreen.classList.add("flex");
+    settingsBar.classList.add("flex");
     setupGame();
 });
 for (const element of audioMute) {
@@ -119,8 +124,10 @@ function generateBox(count) {
 function gameOver() {
     gameScreen.classList.remove("flex");
     gameoverScreenContainer.classList.remove("hide");
+    settingsBar.classList.remove("hide");
     gameScreen.classList.add("hide");
     gameoverScreenContainer.classList.add("flex");
+    settingsBar.classList.add("flex");
     endPointsElement.textContent = `Points: ${points}`;
     stopWorker();
     // this wont work, because i haven't cleared the Interval of that child yet

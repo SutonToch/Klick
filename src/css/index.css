@@ -109,6 +109,7 @@ img {
 }
 
 .info-bar {
+  display: flex;
   width: 100%;
   justify-content: space-between;
   align-self: flex-start;
