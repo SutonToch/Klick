@@ -1,5 +1,4 @@
 const startScreenContainer = document.getElementsByClassName("start-screen-container")[0]
-const infoBar = document.getElementsByClassName("info-bar")[0]
 const gameScreen = document.getElementsByClassName("game-screen")[0]
 const gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0]
 
@@ -10,36 +9,38 @@ const endPointsElement = document.getElementsByClassName("end-points")[0]
 const startGameBtn = document.getElementsByClassName("start-game-btn")[0]
 const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0]
 
+const audioMute = document.getElementsByClassName("audio-mute")
+const audioMuteImg = document.getElementsByClassName("audio-mute-img")
 
 let hp : number = 3
 let points : number = 0
 let worker : Worker | undefined
+
 let backgroundAudio: HTMLAudioElement
 let gainPointsAudio: HTMLAudioElement
 let loseHPAudio: HTMLAudioElement
+let muted = true
 
 // EVENT LISTENERS
 window.addEventListener("load", () => {
     backgroundAudio = new Audio("./src/assets/seven-years-pixabay-Keyframe_Audio.mp3")
-    backgroundAudio.volume = 0.03
+    backgroundAudio.volume = 0
     backgroundAudio.loop = true
 
     gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3")
-    gainPointsAudio.volume = 0.02
+    gainPointsAudio.volume = 0
 
     loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3")
-    loseHPAudio.volume = 0.02
+    loseHPAudio.volume = 0
     
     backgroundAudio.play()
 })
 
 startGameBtn.addEventListener("click", () => {
     startScreenContainer.classList.remove("flex")
-    infoBar.classList.remove("hide")
     gameScreen.classList.remove("hide")
 
     startScreenContainer.classList.add("hide")
-    infoBar.classList.add("flex")
     gameScreen.classList.add("flex")
 
     setupGame()
@@ -50,15 +51,27 @@ startNewGameBtn.addEventListener("click", () => {
     points = 0
 
     gameoverScreenContainer.classList.remove("flex")
-    infoBar.classList.remove("hide")
     gameScreen.classList.remove("hide")
 
     gameoverScreenContainer.classList.add("hide")
-    infoBar.classList.add("flex")
     gameScreen.classList.add("flex")
 
     setupGame()
 })
+
+for(const element of audioMute as any as HTMLElement[]) {
+    element.addEventListener("click", () => {
+        for(const img of audioMuteImg as any as HTMLImageElement[]) {
+            if(img.src.includes("Off")) {
+                img.src = "src/assets/Picol-Picol-Speaker-Louder.256.png"
+                manageMuted(false)
+            } else if(img.src.includes("Louder")) {
+                img.src = "src/assets/Picol-Picol-Speaker-Off.256.png"
+                manageMuted(true)
+            }
+        }
+    })
+}
 
 
 
@@ -134,11 +147,9 @@ function generateBox(count: string) {
 }
 
 function gameOver() {
-    infoBar.classList.remove("flex")
     gameScreen.classList.remove("flex")
     gameoverScreenContainer.classList.remove("hide")
 
-    infoBar.classList.add("hide")
     gameScreen.classList.add("hide")
     gameoverScreenContainer.classList.add("flex")
 
@@ -148,4 +159,18 @@ function gameOver() {
 
     // this wont work, because i haven't cleared the Interval of that child yet
     // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
+}
+
+function manageMuted(muted:boolean) {
+    if(muted) {
+        backgroundAudio.volume = 0
+        gainPointsAudio.volume = 0
+        loseHPAudio.volume = 0
+    } else if(!muted) {
+        backgroundAudio.volume = 0.03
+        gainPointsAudio.volume = 0.02
+        loseHPAudio.volume = 0.02
+    }
+
+
 }

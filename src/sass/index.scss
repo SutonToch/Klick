@@ -24,6 +24,10 @@ body {
   min-height: 100vh;
 }
 
+img {
+  max-width: 100%;
+}
+
 .hide {
   display: none;
 }
@@ -31,6 +35,74 @@ body {
 .flex {
   display: flex;
 }
+
+.start-screen-container {
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.start-screen {
+  font-size: 2rem;
+  width: 400px;
+  text-align: center;
+  background-color: var.$clr-start-screen;
+  border-radius: 10px;
+  padding: 0.5em 1em 1em;
+
+  button {
+      font-size: inherit;
+      color: var.$clr-font-color;
+
+      background-color: var.$clr-background;
+
+      margin: 1em 0em;
+      padding: 0.3em 1.5em;
+
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+  }
+
+  .start-screen-settings {
+    display: flex;
+    justify-content: space-around;
+    width: fit-content;
+    border-radius: 10px;
+    background-color: var.$clr-background;
+    padding: 0.2em 2em 0.2em 2em;
+    margin: 0 auto;
+  }
+}
+
+.gameover-screen {
+  font-size: 2rem;
+  width: 600px;
+  text-align: center;
+  background-color: var.$clr-start-screen;
+  border-radius: 10px;
+  padding: 1em;
+
+  h2 {
+      margin-top: 0.5em;
+      font-size: 2rem;
+  }
+
+  button {
+      font-size: inherit;
+      color: var.$clr-font-color;
+
+      background-color: var.$clr-background;
+
+      margin-top: 2em;
+      padding: 0.3em 1.5em;
+
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+  }
+}
+
 
 .box {
   position: absolute;
@@ -48,10 +120,15 @@ body {
   }
 }
 
+.settings-bar {
+  padding: 1em;
+}
+
 .info-bar {
+  width: 100%;
   justify-content: space-between;
   align-self: flex-start;
-  padding: 2em 4em;
+  padding: 0em 3em;
   font-size: 2rem;
 }
 
@@ -61,59 +138,13 @@ body {
     height: 100vh;
 }
 
-.gameover-screen {
-    font-size: 2rem;
-    width: 600px;
-    text-align: center;
-    background-color: var.$clr-start-screen;
-    border-radius: 10px;
-    padding: 1em;
-
-    h2 {
-        margin-top: 0.5em;
-        font-size: 2rem;
-    }
-
-    button {
-        font-size: inherit;
-        color: var.$clr-font-color;
-
-        background-color: var.$clr-background;
-
-        margin-top: 2em;
-        padding: 0.3em 1.5em;
-
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-    }
-}
-
-.start-screen-container {
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.start-screen {
-    font-size: 2rem;
-    width: 400px;
-    text-align: center;
-    background-color: var.$clr-start-screen;
-    border-radius: 10px;
-    padding: 1em;
-
-    button {
-        font-size: inherit;
-        color: var.$clr-font-color;
-
-        background-color: var.$clr-background;
-
-        margin-top: 1em;
-        padding: 0.3em 1.5em;
-
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-    }
+.audio-mute {
+  display: flex;
+  align-items: center;
+  width: 50px;
+  background-color: var.$clr-background;
+  border-radius: 50%;
+  margin-left: auto;
+  padding: 6px;
+  cursor: pointer;
 }

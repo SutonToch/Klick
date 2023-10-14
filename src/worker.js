@@ -1,4 +1,5 @@
-var idCounter = 0;
+"use strict";
+let idCounter = 0;
 function timeOutForBox() {
     idCounter++;
     postMessage(idCounter.toString());
