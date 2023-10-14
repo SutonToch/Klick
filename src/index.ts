@@ -14,9 +14,25 @@ const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0]
 let hp : number = 3
 let points : number = 0
 let worker : Worker | undefined
-
+let backgroundAudio: HTMLAudioElement
+let gainPointsAudio: HTMLAudioElement
+let loseHPAudio: HTMLAudioElement
 
 // EVENT LISTENERS
+window.addEventListener("load", () => {
+    backgroundAudio = new Audio("./src/assets/seven-years-pixabay-Keyframe_Audio.mp3")
+    backgroundAudio.volume = 0.03
+    backgroundAudio.loop = true
+
+    gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3")
+    gainPointsAudio.volume = 0.02
+
+    loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3")
+    loseHPAudio.volume = 0.02
+    
+    backgroundAudio.play()
+})
+
 startGameBtn.addEventListener("click", () => {
     startScreenContainer.classList.remove("flex")
     infoBar.classList.remove("hide")
@@ -98,12 +114,14 @@ function generateBox(count: string) {
     )`
 
     const intervalId = setInterval(() => {
+        loseHPAudio.play()
         updateHP(`HP: ${hp-1}`)
         gameScreen.removeChild(box)
         clearInterval(intervalId)
-    }, 4900)
+    }, 3900)
 
     box.addEventListener("click", () => {
+        gainPointsAudio.play()
         updatePoints(`Points: ${points+1}`)
         clearInterval(intervalId)
         gameScreen.removeChild(box)
@@ -112,7 +130,7 @@ function generateBox(count: string) {
     gameScreen.appendChild(box)
 
     //works even though the box is already placed on the dom, which is pleasantly suprising
-    box.style.animation = "fadeOut linear 5s"
+    box.style.animation = "fadeOut linear 4s"
 }
 
 function gameOver() {

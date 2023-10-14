@@ -10,7 +10,20 @@ var startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0];
 var hp = 3;
 var points = 0;
 var worker;
+var backgroundAudio;
+var gainPointsAudio;
+var loseHPAudio;
 // EVENT LISTENERS
+window.addEventListener("load", function () {
+    backgroundAudio = new Audio("./src/assets/seven-years-pixabay-Keyframe_Audio.mp3");
+    backgroundAudio.volume = 0.03;
+    backgroundAudio.loop = true;
+    gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3");
+    gainPointsAudio.volume = 0.02;
+    loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3");
+    loseHPAudio.volume = 0.02;
+    backgroundAudio.play();
+});
 startGameBtn.addEventListener("click", function () {
     startScreenContainer.classList.remove("flex");
     infoBar.classList.remove("hide");
@@ -71,18 +84,20 @@ function generateBox(count) {
     box.style.height = (Math.floor(Math.random() * 50) + 50).toString() + "px";
     box.style.backgroundColor = "hsl(\n        ".concat(Math.floor(Math.random() * 360), ",\n        ").concat(Math.floor(Math.random() * 100), "%,\n        ").concat(Math.floor(Math.random() * 100), "%\n    )");
     var intervalId = setInterval(function () {
+        loseHPAudio.play();
         updateHP("HP: ".concat(hp - 1));
         gameScreen.removeChild(box);
         clearInterval(intervalId);
-    }, 4900);
+    }, 3900);
     box.addEventListener("click", function () {
+        gainPointsAudio.play();
         updatePoints("Points: ".concat(points + 1));
         clearInterval(intervalId);
         gameScreen.removeChild(box);
     });
     gameScreen.appendChild(box);
     //works even though the box is already placed on the dom, which is pleasantly suprising
-    box.style.animation = "fadeOut linear 5s";
+    box.style.animation = "fadeOut linear 4s";
 }
 function gameOver() {
     infoBar.classList.remove("flex");
