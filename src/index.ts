@@ -25,15 +25,13 @@ let muted = true
 // EVENT LISTENERS
 window.addEventListener("load", () => {
     backgroundAudio = new Audio("./src/assets/seven-years-pixabay-keyframe_audio-2.mp3")
-    backgroundAudio.volume = 0
     backgroundAudio.loop = true
-
-    gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3")
-    gainPointsAudio.volume = 0
-
-    loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3")
-    loseHPAudio.volume = 0
     
+    gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3")
+    loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3")
+    
+    manageMuted(true)
+
     backgroundAudio.play()
 })
 
@@ -168,12 +166,12 @@ function gameOver() {
     // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
 }
 
-function manageMuted(muted:boolean) {
-    if(muted) {
+function manageMuted(isMuted:boolean) {
+    if(isMuted) {
         backgroundAudio.volume = 0
         gainPointsAudio.volume = 0
         loseHPAudio.volume = 0
-    } else if(!muted) {
+    } else if(!isMuted) {
         backgroundAudio.volume = 0.03
         gainPointsAudio.volume = 0.02
         loseHPAudio.volume = 0.02
