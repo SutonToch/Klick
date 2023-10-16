@@ -1,36 +1,65 @@
-var startScreenContainer = document.getElementsByClassName("start-screen-container")[0];
-var infoBar = document.getElementsByClassName("info-bar")[0];
-var gameScreen = document.getElementsByClassName("game-screen")[0];
-var gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0];
-var hpElement = document.getElementsByClassName("hp")[0];
-var pointsElement = document.getElementsByClassName("points")[0];
-var endPointsElement = document.getElementsByClassName("end-points")[0];
-var startGameBtn = document.getElementsByClassName("start-game-btn")[0];
-var startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0];
-var hp = 3;
-var points = 0;
-var worker;
+"use strict";
+const startScreenContainer = document.getElementsByClassName("start-screen-container")[0];
+const gameScreen = document.getElementsByClassName("game-screen")[0];
+const gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0];
+const settingsBar = document.getElementsByClassName("settings-bar")[0];
+const hpElement = document.getElementsByClassName("hp")[0];
+const pointsElement = document.getElementsByClassName("points")[0];
+const endPointsElement = document.getElementsByClassName("end-points")[0];
+const startGameBtn = document.getElementsByClassName("start-game-btn")[0];
+const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0];
+const audioMute = document.getElementsByClassName("audio-mute");
+const audioMuteImg = document.getElementsByClassName("audio-mute-img");
+let hp = 3;
+let points = 0;
+let worker;
+let backgroundAudio;
+let gainPointsAudio;
+let loseHPAudio;
+let muted = true;
 // EVENT LISTENERS
-startGameBtn.addEventListener("click", function () {
+window.addEventListener("load", () => {
+    backgroundAudio = new Audio("./src/assets/seven-years-pixabay-keyframe_audio-2.mp3");
+    backgroundAudio.loop = true;
+    gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3");
+    loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3");
+    manageMuted(true);
+    backgroundAudio.play();
+});
+startGameBtn.addEventListener("click", () => {
     startScreenContainer.classList.remove("flex");
-    infoBar.classList.remove("hide");
     gameScreen.classList.remove("hide");
+    settingsBar.classList.remove("hide");
     startScreenContainer.classList.add("hide");
-    infoBar.classList.add("flex");
     gameScreen.classList.add("flex");
+    settingsBar.classList.add("flex");
     setupGame();
 });
-startNewGameBtn.addEventListener("click", function () {
+startNewGameBtn.addEventListener("click", () => {
     hp = 3;
     points = 0;
     gameoverScreenContainer.classList.remove("flex");
-    infoBar.classList.remove("hide");
     gameScreen.classList.remove("hide");
+    settingsBar.classList.remove("hide");
     gameoverScreenContainer.classList.add("hide");
-    infoBar.classList.add("flex");
     gameScreen.classList.add("flex");
+    settingsBar.classList.add("flex");
     setupGame();
 });
+for (const element of audioMute) {
+    element.addEventListener("click", () => {
+        for (const img of audioMuteImg) {
+            if (img.src.includes("Off")) {
+                img.src = "src/assets/Picol-Picol-Speaker-Louder.256.png";
+                manageMuted(false);
+            }
+            else if (img.src.includes("Louder")) {
+                img.src = "src/assets/Picol-Picol-Speaker-Off.256.png";
+                manageMuted(true);
+            }
+        }
+    });
+}
 function setupGame() {
     updateHP("HP: " + hp);
     updatePoints("Points: " + points);
@@ -51,7 +80,7 @@ function startWorker() {
     if (worker == undefined) {
         worker = new Worker("src/worker.js", { type: "module" });
     }
-    worker.onmessage = function (count) { return generateBox(count.data); };
+    worker.onmessage = (count) => generateBox(count.data);
 }
 function stopWorker() {
     if (worker == undefined) {
@@ -61,7 +90,7 @@ function stopWorker() {
     worker = undefined;
 }
 function generateBox(count) {
-    var box = document.createElement("div");
+    const box = document.createElement("div");
     box.classList.add("box");
     //maybe the id is not necessary, but I'll leave it in for now
     box.setAttribute("id", count.toString());
@@ -69,30 +98,48 @@ function generateBox(count) {
     box.style.left = (window.innerWidth * 0.1 + Math.floor(Math.random() * (window.innerWidth * 0.8))).toString() + "px";
     box.style.width = (Math.floor(Math.random() * 50) + 50).toString() + "px";
     box.style.height = (Math.floor(Math.random() * 50) + 50).toString() + "px";
-    box.style.backgroundColor = "hsl(\n        ".concat(Math.floor(Math.random() * 360), ",\n        ").concat(Math.floor(Math.random() * 100), "%,\n        ").concat(Math.floor(Math.random() * 100), "%\n    )");
-    var intervalId = setInterval(function () {
-        updateHP("HP: ".concat(hp - 1));
+    box.style.backgroundColor = `hsl(
+        ${Math.floor(Math.random() * 360)},
+        ${Math.floor(Math.random() * 100)}%,
+        ${Math.floor(Math.random() * 100)}%
+    )`;
+    const intervalId = setInterval(() => {
+        loseHPAudio.play();
+        updateHP(`HP: ${hp - 1}`);
         gameScreen.removeChild(box);
         clearInterval(intervalId);
-    }, 4900);
-    box.addEventListener("click", function () {
-        updatePoints("Points: ".concat(points + 1));
+    }, 3900);
+    box.addEventListener("click", () => {
+        gainPointsAudio.play();
+        updatePoints(`Points: ${points + 1}`);
         clearInterval(intervalId);
         gameScreen.removeChild(box);
     });
     gameScreen.appendChild(box);
     //works even though the box is already placed on the dom, which is pleasantly suprising
-    box.style.animation = "fadeOut linear 5s";
+    box.style.animation = "fadeOut linear 4s";
 }
 function gameOver() {
-    infoBar.classList.remove("flex");
     gameScreen.classList.remove("flex");
     gameoverScreenContainer.classList.remove("hide");
-    infoBar.classList.add("hide");
+    settingsBar.classList.remove("hide");
     gameScreen.classList.add("hide");
     gameoverScreenContainer.classList.add("flex");
-    endPointsElement.textContent = "Points: ".concat(points);
+    settingsBar.classList.add("flex");
+    endPointsElement.textContent = `Points: ${points}`;
     stopWorker();
     // this wont work, because i haven't cleared the Interval of that child yet
     // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
+}
+function manageMuted(isMuted) {
+    if (isMuted) {
+        backgroundAudio.volume = 0;
+        gainPointsAudio.volume = 0;
+        loseHPAudio.volume = 0;
+    }
+    else if (!isMuted) {
+        backgroundAudio.volume = 0.03;
+        gainPointsAudio.volume = 0.02;
+        loseHPAudio.volume = 0.02;
+    }
 }

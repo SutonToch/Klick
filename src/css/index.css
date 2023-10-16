@@ -20,6 +20,10 @@ body {
   min-height: 100vh;
 }
 
+img {
+  max-width: 100%;
+}
+
 .hide {
   display: none;
 }
@@ -28,31 +32,38 @@ body {
   display: flex;
 }
 
-.box {
-  position: absolute;
-  border: 2px solid white;
-  opacity: 1;
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.info-bar {
-  justify-content: space-between;
-  align-self: flex-start;
-  padding: 2em 4em;
-  font-size: 2rem;
-}
-
-.gameover-screen-container {
+.start-screen-container {
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.start-screen {
+  font-size: 2rem;
+  width: 400px;
+  text-align: center;
+  background-color: hsl(0, 0%, 7%);
+  border-radius: 10px;
+  padding: 0.5em 1em 1em;
+}
+.start-screen button {
+  font-size: inherit;
+  color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 10%);
+  margin: 1em 0em;
+  padding: 0.3em 1.5em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.start-screen .start-screen-settings {
+  display: flex;
+  justify-content: space-around;
+  width: fit-content;
+  border-radius: 10px;
+  background-color: hsl(0, 0%, 10%);
+  padding: 0.2em 2em 0.2em 2em;
+  margin: 0 auto;
 }
 
 .gameover-screen {
@@ -78,28 +89,48 @@ body {
   cursor: pointer;
 }
 
-.start-screen-container {
+.box {
+  position: absolute;
+  border: 2px solid white;
+  opacity: 1;
+  cursor: pointer;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.settings-bar {
+  padding: 1em;
+}
+
+.info-bar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-self: flex-start;
+  padding: 0em 3em;
+  font-size: 2rem;
+}
+
+.gameover-screen-container {
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.start-screen {
-  font-size: 2rem;
-  width: 400px;
-  text-align: center;
-  background-color: hsl(0, 0%, 7%);
-  border-radius: 10px;
-  padding: 1em;
-}
-.start-screen button {
-  font-size: inherit;
-  color: hsl(0, 0%, 90%);
+.audio-mute {
+  display: flex;
+  align-items: center;
+  width: 50px;
   background-color: hsl(0, 0%, 10%);
-  margin-top: 1em;
-  padding: 0.3em 1.5em;
-  border: none;
-  border-radius: 10px;
+  border-radius: 50%;
+  margin-left: auto;
+  padding: 6px;
   cursor: pointer;
 }
 
