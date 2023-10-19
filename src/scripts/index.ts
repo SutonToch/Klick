@@ -1,40 +1,30 @@
+import { gainPointsAudio, loseHPAudio } from "./audio.js"
+
+// CONTAINERS to show and hide
 const startScreenContainer = document.getElementsByClassName("start-screen-container")[0]
 const gameScreen = document.getElementsByClassName("game-screen")[0]
 const gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0]
 const settingsBar = document.getElementsByClassName("settings-bar")[0]
 
+// ELEMENTS to manipulate content
 const hpElement = document.getElementsByClassName("hp")[0]
 const pointsElement = document.getElementsByClassName("points")[0]
 const endPointsElement = document.getElementsByClassName("end-points")[0]
 
+// BUTTONS & Elements that get Event Listeners
 const startGameBtn = document.getElementsByClassName("start-game-btn")[0]
 const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0]
 
-const audioMute = document.getElementsByClassName("audio-mute")
-const audioMuteImg = document.getElementsByClassName("audio-mute-img")
-
-let hp : number = 3
-let points : number = 0
+// Variables for logic
+const defaultHPValue = 3
+const defaultPointsValue = 0
+let currentHP : number
+let currentPoints : number
 let worker : Worker | undefined
 
-let backgroundAudio: HTMLAudioElement
-let gainPointsAudio: HTMLAudioElement
-let loseHPAudio: HTMLAudioElement
-let muted = true
 
-// EVENT LISTENERS
-window.addEventListener("load", () => {
-    backgroundAudio = new Audio("./src/assets/seven-years-pixabay-keyframe_audio-2.mp3")
-    backgroundAudio.loop = true
-    
-    gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3")
-    loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3")
-    
-    manageMuted(true)
-
-    backgroundAudio.play()
-})
-
+// TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
+//       would remove one Event Listener here
 startGameBtn.addEventListener("click", () => {
     startScreenContainer.classList.remove("flex")
     gameScreen.classList.remove("hide")
@@ -48,9 +38,6 @@ startGameBtn.addEventListener("click", () => {
 })
 
 startNewGameBtn.addEventListener("click", () => {
-    hp = 3
-    points = 0
-
     gameoverScreenContainer.classList.remove("flex")
     gameScreen.classList.remove("hide")
     settingsBar.classList.remove("hide")
@@ -62,46 +49,38 @@ startNewGameBtn.addEventListener("click", () => {
     setupGame()
 })
 
-for(const element of audioMute as any as HTMLElement[]) {
-    element.addEventListener("click", () => {
-        for(const img of audioMuteImg as any as HTMLImageElement[]) {
-            if(img.src.includes("Off")) {
-                img.src = "src/assets/Picol-Picol-Speaker-Louder.256.png"
-                manageMuted(false)
-            } else if(img.src.includes("Louder")) {
-                img.src = "src/assets/Picol-Picol-Speaker-Off.256.png"
-                manageMuted(true)
-            }
-        }
-    })
-}
-
-
 
 function setupGame() {
-    updateHP("HP: " + hp)
-    updatePoints("Points: " + points)
+    currentHP = defaultHPValue
+    currentPoints = defaultPointsValue
+    updateHP("HP: " + currentHP)
+    updatePoints("Points: " + currentPoints)
     startWorker()
 }
 
-function updateHP(textContent : string) {
-    hp = Number(textContent.replace("HP: ", ""))
-    hpElement.textContent = textContent
-    if(hp == 0) {
+function updateHP(infoBarHPText : string) {
+    currentHP = Number(infoBarHPText.replace("HP: ", ""))
+    hpElement.textContent = infoBarHPText
+    if(currentHP < 1) {
         gameOver()
     }
 }
 
-function updatePoints(textContent : string) {
-    points = Number(textContent.replace("Points: ", ""))
-    pointsElement.textContent = textContent
-}
+function gameOver() {
+    gameScreen.classList.remove("flex")
+    gameoverScreenContainer.classList.remove("hide")
+    settingsBar.classList.remove("hide")
 
-function startWorker() {
-    if(worker == undefined) {
-        worker = new Worker("src/worker.js", {type: "module"})
-    }
-    worker.onmessage = (count) => generateBox(count.data)
+    gameScreen.classList.add("hide")
+    gameoverScreenContainer.classList.add("flex")
+    settingsBar.classList.add("flex")
+
+    endPointsElement.textContent = `Points: ${currentPoints}`
+
+    stopWorker()
+
+    // this wont work, because i haven't cleared the Interval of that child yet
+    // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
 }
 
 function stopWorker() {
@@ -110,6 +89,18 @@ function stopWorker() {
     }
     worker.terminate()
     worker = undefined
+}
+
+function updatePoints(infoBarPointsText : string) {
+    currentPoints = Number(infoBarPointsText.replace("Points: ", ""))
+    pointsElement.textContent = infoBarPointsText
+}
+
+function startWorker() {
+    if(worker == undefined) {
+        worker = new Worker("./src/scripts/worker.js", {type: "module"})
+    }
+    worker.onmessage = (msg) => generateBox(msg.data)
 }
 
 function generateBox(count: string) {
@@ -131,14 +122,14 @@ function generateBox(count: string) {
 
     const intervalId = setInterval(() => {
         loseHPAudio.play()
-        updateHP(`HP: ${hp-1}`)
+        updateHP(`HP: ${currentHP-1}`)
         gameScreen.removeChild(box)
         clearInterval(intervalId)
     }, 3900)
 
     box.addEventListener("click", () => {
         gainPointsAudio.play()
-        updatePoints(`Points: ${points+1}`)
+        updatePoints(`Points: ${currentPoints+1}`)
         clearInterval(intervalId)
         gameScreen.removeChild(box)
     })
@@ -146,36 +137,5 @@ function generateBox(count: string) {
     gameScreen.appendChild(box)
 
     //works even though the box is already placed on the dom, which is pleasantly suprising
-    box.style.animation = "fadeOut linear 4s"
-}
-
-function gameOver() {
-    gameScreen.classList.remove("flex")
-    gameoverScreenContainer.classList.remove("hide")
-    settingsBar.classList.remove("hide")
-
-    gameScreen.classList.add("hide")
-    gameoverScreenContainer.classList.add("flex")
-    settingsBar.classList.add("flex")
-
-    endPointsElement.textContent = `Points: ${points}`
-
-    stopWorker()
-
-    // this wont work, because i haven't cleared the Interval of that child yet
-    // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
-}
-
-function manageMuted(isMuted:boolean) {
-    if(isMuted) {
-        backgroundAudio.volume = 0
-        gainPointsAudio.volume = 0
-        loseHPAudio.volume = 0
-    } else if(!isMuted) {
-        backgroundAudio.volume = 0.03
-        gainPointsAudio.volume = 0.02
-        loseHPAudio.volume = 0.02
-    }
-
-
+    box.style.animation = "fadeOut linear 4000ms"
 }
