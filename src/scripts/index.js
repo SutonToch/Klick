@@ -17,6 +17,11 @@ var defaultPointsValue = 0;
 var currentHP;
 var currentPoints;
 var worker;
+var challenge = {
+    current: 2,
+    spawnTime: 2000,
+    clickTime: 8000
+};
 // TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
 //       would remove one Event Listener here
 startGameBtn.addEventListener("click", function () {
@@ -77,6 +82,7 @@ function updatePoints(infoBarPointsText) {
 function startWorker() {
     if (worker == undefined) {
         worker = new Worker("./src/scripts/worker.js", { type: "module" });
+        worker.postMessage(4000 / challenge.current);
     }
     worker.onmessage = function (msg) { return generateBox(msg.data); };
 }
@@ -95,14 +101,33 @@ function generateBox(count) {
         updateHP("HP: ".concat(currentHP - 1));
         gameScreen.removeChild(box);
         clearInterval(intervalId);
-    }, 3900);
+    }, challenge.clickTime - 100);
     box.addEventListener("click", function () {
+        var endTime = performance.now();
         gainPointsAudio.play();
         updatePoints("Points: ".concat(currentPoints + 1));
         clearInterval(intervalId);
         gameScreen.removeChild(box);
+        console.log(endTime - startTime);
+        adjustChallenge(endTime - startTime);
     });
+    var startTime = performance.now();
     gameScreen.appendChild(box);
     //works even though the box is already placed on the dom, which is pleasantly suprising
-    box.style.animation = "fadeOut linear 4000ms";
+    box.style.animation = "fadeOut linear ".concat(challenge.clickTime, "ms");
+}
+function adjustChallenge(timeUntilClickMs) {
+    if (timeUntilClickMs < 600) {
+        challenge.current = Math.min(challenge.current + 0.2, 8);
+    }
+    else if (timeUntilClickMs < 800) {
+        challenge.current = Math.min(challenge.current + 0.1, 8);
+    }
+    else if (timeUntilClickMs > 2000) {
+        challenge.current = Math.max(challenge.current - 0.1, 1);
+    }
+    challenge.spawnTime = 4000 / challenge.current;
+    challenge.clickTime = challenge.spawnTime * 4;
+    worker === null || worker === void 0 ? void 0 : worker.postMessage(challenge.spawnTime);
+    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime);
 }

@@ -21,6 +21,11 @@ const defaultPointsValue = 0
 let currentHP : number
 let currentPoints : number
 let worker : Worker | undefined
+let challenge = {
+    current: 2,
+    spawnTime: 2000,
+    clickTime: 8000
+}
 
 
 // TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
@@ -99,6 +104,7 @@ function updatePoints(infoBarPointsText : string) {
 function startWorker() {
     if(worker == undefined) {
         worker = new Worker("./src/scripts/worker.js", {type: "module"})
+        worker.postMessage(4000 / challenge.current)
     }
     worker.onmessage = (msg) => generateBox(msg.data)
 }
@@ -125,17 +131,39 @@ function generateBox(count: string) {
         updateHP(`HP: ${currentHP-1}`)
         gameScreen.removeChild(box)
         clearInterval(intervalId)
-    }, 3900)
+    }, challenge.clickTime - 100)
 
     box.addEventListener("click", () => {
+        const endTime = performance.now()
         gainPointsAudio.play()
         updatePoints(`Points: ${currentPoints+1}`)
         clearInterval(intervalId)
         gameScreen.removeChild(box)
+        console.log(endTime-startTime)
+        adjustChallenge(endTime-startTime)
     })
+
+    const startTime = performance.now()
 
     gameScreen.appendChild(box)
 
     //works even though the box is already placed on the dom, which is pleasantly suprising
-    box.style.animation = "fadeOut linear 4000ms"
+    box.style.animation = `fadeOut linear ${challenge.clickTime}ms`
+}
+
+function adjustChallenge(timeUntilClickMs: number) {
+
+    if(timeUntilClickMs < 600) {
+        challenge.current = Math.min(challenge.current + 0.2, 8)
+    } else if(timeUntilClickMs < 800) { 
+        challenge.current = Math.min(challenge.current + 0.1, 8)
+    } else if(timeUntilClickMs > 2000) {
+        challenge.current = Math.max(challenge.current - 0.1, 1)
+    }
+
+    challenge.spawnTime = 4000 / challenge.current
+    challenge.clickTime = challenge.spawnTime * 4
+    worker?.postMessage(challenge.spawnTime)
+
+    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime)
 }

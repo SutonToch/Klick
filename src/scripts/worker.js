@@ -1,8 +1,12 @@
 "use strict";
+var timeUntilNextBoxInMs = 4000;
 var idCounter = 0;
 function timeOutForBox() {
     idCounter++;
     postMessage(idCounter.toString());
-    setTimeout(timeOutForBox, 4000);
+    setTimeout(timeOutForBox, timeUntilNextBoxInMs);
 }
+self.onmessage = function (msg) {
+    timeUntilNextBoxInMs = msg.data;
+};
 timeOutForBox();
