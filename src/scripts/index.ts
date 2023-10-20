@@ -152,6 +152,13 @@ function generateBox(count: string) {
 }
 
 function adjustChallenge(timeUntilClickMs: number) {
+    if(currentPoints > 150) {
+        challenge.current = Math.max(challenge.current, 8)
+    } else if(currentPoints > 50) {
+        challenge.current = Math.max(challenge.current, 4)
+    } else if(currentPoints > 10) {
+        challenge.current = Math.max(challenge.current, 2)
+    }
 
     if(timeUntilClickMs < 600) {
         challenge.current = Math.min(challenge.current + 0.2, 8)

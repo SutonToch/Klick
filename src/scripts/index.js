@@ -108,7 +108,6 @@ function generateBox(count) {
         updatePoints("Points: ".concat(currentPoints + 1));
         clearInterval(intervalId);
         gameScreen.removeChild(box);
-        console.log(endTime - startTime);
         adjustChallenge(endTime - startTime);
     });
     var startTime = performance.now();
@@ -117,6 +116,15 @@ function generateBox(count) {
     box.style.animation = "fadeOut linear ".concat(challenge.clickTime, "ms");
 }
 function adjustChallenge(timeUntilClickMs) {
+    if (currentPoints > 150) {
+        challenge.current = Math.max(challenge.current, 8);
+    }
+    else if (currentPoints > 50) {
+        challenge.current = Math.max(challenge.current, 4);
+    }
+    else if (currentPoints > 10) {
+        challenge.current = Math.max(challenge.current, 2);
+    }
     if (timeUntilClickMs < 600) {
         challenge.current = Math.min(challenge.current + 0.2, 8);
     }
@@ -129,5 +137,4 @@ function adjustChallenge(timeUntilClickMs) {
     challenge.spawnTime = 4000 / challenge.current;
     challenge.clickTime = challenge.spawnTime * 4;
     worker === null || worker === void 0 ? void 0 : worker.postMessage(challenge.spawnTime);
-    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime);
 }
