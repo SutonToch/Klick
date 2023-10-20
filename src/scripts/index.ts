@@ -1,5 +1,11 @@
 import { gainPointsAudio, loseHPAudio } from "./audio.js"
 
+interface ChallengeObject {
+    current: number,
+    spawnTime: number,
+    clickTime: number
+}
+
 // CONTAINERS to show and hide
 const startScreenContainer = document.getElementsByClassName("start-screen-container")[0]
 const gameScreen = document.getElementsByClassName("game-screen")[0]
@@ -21,12 +27,11 @@ const defaultPointsValue = 0
 let currentHP : number
 let currentPoints : number
 let worker : Worker | undefined
-let challenge = {
+let challenge : ChallengeObject = {
     current: 2,
     spawnTime: 2000,
     clickTime: 8000
 }
-
 
 // TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
 //       would remove one Event Listener here
@@ -58,6 +63,12 @@ startNewGameBtn.addEventListener("click", () => {
 function setupGame() {
     currentHP = defaultHPValue
     currentPoints = defaultPointsValue
+    challenge = {
+        current: 2,
+        spawnTime: 2000,
+        clickTime: 8000
+    }
+
     updateHP("HP: " + currentHP)
     updatePoints("Points: " + currentPoints)
     startWorker()
@@ -74,11 +85,11 @@ function updateHP(infoBarHPText : string) {
 function gameOver() {
     gameScreen.classList.remove("flex")
     gameoverScreenContainer.classList.remove("hide")
-    settingsBar.classList.remove("hide")
+    settingsBar.classList.remove("flex")
 
     gameScreen.classList.add("hide")
     gameoverScreenContainer.classList.add("flex")
-    settingsBar.classList.add("flex")
+    settingsBar.classList.add("hide")
 
     endPointsElement.textContent = `Points: ${currentPoints}`
 
@@ -139,7 +150,6 @@ function generateBox(count: string) {
         updatePoints(`Points: ${currentPoints+1}`)
         clearInterval(intervalId)
         gameScreen.removeChild(box)
-        console.log(endTime-startTime)
         adjustChallenge(endTime-startTime)
     })
 
@@ -172,5 +182,4 @@ function adjustChallenge(timeUntilClickMs: number) {
     challenge.clickTime = challenge.spawnTime * 4
     worker?.postMessage(challenge.spawnTime)
 
-    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime)
 }

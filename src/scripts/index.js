@@ -45,6 +45,13 @@ startNewGameBtn.addEventListener("click", function () {
 function setupGame() {
     currentHP = defaultHPValue;
     currentPoints = defaultPointsValue;
+    challenge = {
+        current: 2,
+        spawnTime: 2000,
+        clickTime: 8000
+    };
+    console.log("[SETUP] challenge is now: " + challenge.current);
+    // console.log("[SETUP] defaultChallenge is now: " + defaultChallenge.current)
     updateHP("HP: " + currentHP);
     updatePoints("Points: " + currentPoints);
     startWorker();
@@ -59,10 +66,10 @@ function updateHP(infoBarHPText) {
 function gameOver() {
     gameScreen.classList.remove("flex");
     gameoverScreenContainer.classList.remove("hide");
-    settingsBar.classList.remove("hide");
+    settingsBar.classList.remove("flex");
     gameScreen.classList.add("hide");
     gameoverScreenContainer.classList.add("flex");
-    settingsBar.classList.add("flex");
+    settingsBar.classList.add("hide");
     endPointsElement.textContent = "Points: ".concat(currentPoints);
     stopWorker();
     // this wont work, because i haven't cleared the Interval of that child yet
@@ -137,4 +144,5 @@ function adjustChallenge(timeUntilClickMs) {
     challenge.spawnTime = 4000 / challenge.current;
     challenge.clickTime = challenge.spawnTime * 4;
     worker === null || worker === void 0 ? void 0 : worker.postMessage(challenge.spawnTime);
+    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime);
 }
