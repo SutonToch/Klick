@@ -1,7 +1,7 @@
 const backgroundAudio: HTMLAudioElement 
     = new Audio("./src/assets/seven-years-pixabay-keyframe_audio-2.mp3")
 export const gainPointsAudio: HTMLAudioElement
-    = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3")
+    = new Audio("./src/assets/message-incoming-universfield_025.mp3")
 export const loseHPAudio: HTMLAudioElement
     = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3")
 
@@ -37,7 +37,7 @@ function manageMuted(isMuted:boolean) {
         loseHPAudio.volume = 0
     } else if(!isMuted) {
         backgroundAudio.volume = 0.03
-        gainPointsAudio.volume = 0.02
+        gainPointsAudio.volume = 0.01
         loseHPAudio.volume = 0.02
     }
 }
