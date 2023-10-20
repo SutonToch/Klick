@@ -32,6 +32,7 @@ let challenge : ChallengeObject = {
     spawnTime: 2000,
     clickTime: 8000
 }
+let timeoutIds:NodeJS.Timeout[] = []
 
 // TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
 //       would remove one Event Listener here
@@ -95,8 +96,10 @@ function gameOver() {
 
     stopWorker()
 
-    // this wont work, because i haven't cleared the Interval of that child yet
-    // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
+    for(let i=gameScreen.children.length-1; i>1; i--) {
+        clearInterval(timeoutIds[Number(gameScreen.children[i].id)])
+        gameScreen.children[i].remove()
+    }
 }
 
 function stopWorker() {
@@ -143,6 +146,8 @@ function generateBox(count: string) {
         gameScreen.removeChild(box)
         clearInterval(intervalId)
     }, challenge.clickTime - 100)
+
+    timeoutIds[Number(count)] = intervalId
 
     box.addEventListener("click", () => {
         const endTime = performance.now()
