@@ -50,8 +50,6 @@ function setupGame() {
         spawnTime: 2000,
         clickTime: 8000
     };
-    console.log("[SETUP] challenge is now: " + challenge.current);
-    // console.log("[SETUP] defaultChallenge is now: " + defaultChallenge.current)
     updateHP("HP: " + currentHP);
     updatePoints("Points: " + currentPoints);
     startWorker();
@@ -144,5 +142,4 @@ function adjustChallenge(timeUntilClickMs) {
     challenge.spawnTime = 4000 / challenge.current;
     challenge.clickTime = challenge.spawnTime * 4;
     worker === null || worker === void 0 ? void 0 : worker.postMessage(challenge.spawnTime);
-    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime);
 }
