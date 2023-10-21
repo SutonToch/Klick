@@ -22,6 +22,7 @@ var challenge = {
     spawnTime: 2000,
     clickTime: 8000
 };
+var timeoutIds = [];
 // TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
 //       would remove one Event Listener here
 startGameBtn.addEventListener("click", function () {
@@ -50,8 +51,6 @@ function setupGame() {
         spawnTime: 2000,
         clickTime: 8000
     };
-    console.log("[SETUP] challenge is now: " + challenge.current);
-    // console.log("[SETUP] defaultChallenge is now: " + defaultChallenge.current)
     updateHP("HP: " + currentHP);
     updatePoints("Points: " + currentPoints);
     startWorker();
@@ -72,8 +71,10 @@ function gameOver() {
     settingsBar.classList.add("hide");
     endPointsElement.textContent = "Points: ".concat(currentPoints);
     stopWorker();
-    // this wont work, because i haven't cleared the Interval of that child yet
-    // gameScreen.childNodes.forEach(node => gameScreen.removeChild(node))
+    for (var i = gameScreen.children.length - 1; i > 1; i--) {
+        clearInterval(timeoutIds[Number(gameScreen.children[i].id)]);
+        gameScreen.children[i].remove();
+    }
 }
 function stopWorker() {
     if (worker == undefined) {
@@ -109,6 +110,7 @@ function generateBox(count) {
         gameScreen.removeChild(box);
         clearInterval(intervalId);
     }, challenge.clickTime - 100);
+    timeoutIds[Number(count)] = intervalId;
     box.addEventListener("click", function () {
         var endTime = performance.now();
         gainPointsAudio.play();
@@ -144,5 +146,4 @@ function adjustChallenge(timeUntilClickMs) {
     challenge.spawnTime = 4000 / challenge.current;
     challenge.clickTime = challenge.spawnTime * 4;
     worker === null || worker === void 0 ? void 0 : worker.postMessage(challenge.spawnTime);
-    console.log(challenge.current + " " + challenge.spawnTime + " " + challenge.clickTime);
 }

@@ -1,5 +1,5 @@
 var backgroundAudio = new Audio("./src/assets/seven-years-pixabay-keyframe_audio-2.mp3");
-export var gainPointsAudio = new Audio("./src/assets/message-incoming-UNIVERSFIELD.mp3");
+export var gainPointsAudio = new Audio("./src/assets/message-incoming-universfield_025.mp3");
 export var loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3");
 var audioMute = document.getElementsByClassName("audio-mute");
 var audioMuteImg = document.getElementsByClassName("audio-mute-img");
@@ -32,7 +32,7 @@ function manageMuted(isMuted) {
     }
     else if (!isMuted) {
         backgroundAudio.volume = 0.03;
-        gainPointsAudio.volume = 0.02;
+        gainPointsAudio.volume = 0.01;
         loseHPAudio.volume = 0.02;
     }
 }
