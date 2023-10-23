@@ -135,11 +135,10 @@ function generateBox(count: string) {
     const box = document.createElement("div")
     box.classList.add("box")
 
-    //maybe the id is not necessary, but I'll leave it in for now
     box.setAttribute("id", count.toString())
 
-    box.style.top = (window.innerHeight*0.1 + Math.floor(Math.random()*(window.innerHeight*0.8))).toString() + "px"
-    box.style.left = (window.innerWidth*0.1 + Math.floor(Math.random()*(window.innerWidth*0.8))).toString() + "px"
+    box.style.top = (154 + Math.floor(Math.random()*(window.innerHeight-154-150))).toString() + "px"
+    box.style.left = (50 + window.innerWidth*0.1 + Math.floor(Math.random() * (window.innerWidth - 200 - (window.innerWidth*0.2)))).toString() + "px"
     box.style.width = (Math.floor(Math.random()*50)+50).toString() + "px"
     box.style.height = (Math.floor(Math.random()*50)+50).toString() + "px"
     box.style.backgroundColor = `hsl(
