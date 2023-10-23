@@ -16,6 +16,7 @@ const settingsBar = document.getElementsByClassName("settings-bar")[0]
 const hpElement = document.getElementsByClassName("hp")[0]
 const pointsElement = document.getElementsByClassName("points")[0]
 const endPointsElement = document.getElementsByClassName("end-points")[0]
+const highscoreElement = document.getElementsByClassName("highscore")[0]
 
 // BUTTONS & Elements that get Event Listeners
 const startGameBtn = document.getElementsByClassName("start-game-btn")[0]
@@ -92,7 +93,14 @@ function gameOver() {
     gameoverScreenContainer.classList.add("flex")
     settingsBar.classList.add("hide")
 
+    let highscore : number = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0
+    if(currentPoints > highscore) {
+        highscore = currentPoints
+        localStorage.setItem("highscore", JSON.stringify(currentPoints))
+    }
+
     endPointsElement.textContent = `Points: ${currentPoints}`
+    highscoreElement.textContent = `Highscore: ${highscore}`
 
     stopWorker()
 

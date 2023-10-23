@@ -8,6 +8,7 @@ var settingsBar = document.getElementsByClassName("settings-bar")[0];
 var hpElement = document.getElementsByClassName("hp")[0];
 var pointsElement = document.getElementsByClassName("points")[0];
 var endPointsElement = document.getElementsByClassName("end-points")[0];
+var highscoreElement = document.getElementsByClassName("highscore")[0];
 // BUTTONS & Elements that get Event Listeners
 var startGameBtn = document.getElementsByClassName("start-game-btn")[0];
 var startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0];
@@ -69,7 +70,13 @@ function gameOver() {
     gameScreen.classList.add("hide");
     gameoverScreenContainer.classList.add("flex");
     settingsBar.classList.add("hide");
+    var highscore = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0;
+    if (currentPoints > highscore) {
+        highscore = currentPoints;
+        localStorage.setItem("highscore", JSON.stringify(currentPoints));
+    }
     endPointsElement.textContent = "Points: ".concat(currentPoints);
+    highscoreElement.textContent = "Highscore: ".concat(highscore);
     stopWorker();
     for (var i = gameScreen.children.length - 1; i > 1; i--) {
         clearInterval(timeoutIds[Number(gameScreen.children[i].id)]);
