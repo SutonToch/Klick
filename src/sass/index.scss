@@ -1,12 +1,17 @@
 @use 'variables' as var;
 
+@font-face {
+  src: url('../assets/fonts/Aldrich-Regular.ttf');
+  font-family: 'Aldrich-Regular';
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
 }
 
 :root {  
-    font-family: sans-serif;
+    font-family: 'Aldrich-Regular';
   
     color-scheme: light dark;
     color: var.$clr-font-color;
@@ -26,6 +31,10 @@ body {
 
 img {
   max-width: 100%;
+}
+
+button {
+  font-family: inherit;
 }
 
 .hide {
