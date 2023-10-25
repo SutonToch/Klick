@@ -149,7 +149,7 @@ function generateBox(count: string) {
 
     const intervalId = setInterval(() => {
         loseHPAudio.play()
-        updateHP(`HP: ${currentHP-1}`)
+        hpLost()
         gameScreen.removeChild(box)
         clearInterval(intervalId)
     }, challenge.clickTime - 100)
@@ -179,6 +179,23 @@ function generateBox(count: string) {
     box.style.animation = `fadeOut linear ${challenge.clickTime}ms`
 }
 
+function hpLost() {
+    updateHP(`HP: ${currentHP-1}`)
+    const hpLost = document.createElement("p")
+    hpLost.classList.add("hpLost")
+    hpLost.textContent = "-1"
+
+    if(window.innerWidth > 1440) {
+        hpLost.style.left = (190+((window.innerWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    } else {
+        hpLost.style.left = 190 + (Math.random()*20-10) + "px"
+    }
+
+    hpLost.style.top = (90 + (Math.random()*10-5)) + "px"
+    gameScreen.appendChild(hpLost)
+    setTimeout(() => gameScreen.removeChild(hpLost), 900)
+}
+
 function pointGained() {
     updatePoints(`Points: ${currentPoints+1}`)
 
@@ -191,6 +208,7 @@ function pointGained() {
     } else {
         pointGained.style.left = (window.innerWidth-90) + (Math.random()*20-10) + "px"
     }
+
     pointGained.style.top = (90 + (Math.random()*10-5)) + "px"
     gameScreen.appendChild(pointGained)
     setTimeout(() => gameScreen.removeChild(pointGained), 900)

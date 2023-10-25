@@ -25,6 +25,15 @@
     translate: 0 -30px;
   }
 }
+@keyframes hpLost {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 30px;
+  }
+}
 @font-face {
   src: url("../assets/fonts/Aldrich-Regular.ttf");
   font-family: "Aldrich-Regular";
@@ -183,6 +192,13 @@ button:active {
   position: absolute;
   font-size: 1.4rem;
   animation: pointGained linear 1s;
+}
+
+.hpLost {
+  position: absolute;
+  font-size: 1.4rem;
+  color: red;
+  animation: hpLost linear 1s;
 }
 
 /*# sourceMappingURL=index.css.map */

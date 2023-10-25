@@ -112,7 +112,7 @@ function generateBox(count) {
     box.style.backgroundColor = "hsl(\n        ".concat(Math.floor(Math.random() * 360), ",\n        ").concat(Math.floor(Math.random() * 100), "%,\n        ").concat(Math.floor(Math.random() * 100), "%\n    )");
     var intervalId = setInterval(function () {
         loseHPAudio.play();
-        updateHP("HP: ".concat(currentHP - 1));
+        hpLost();
         gameScreen.removeChild(box);
         clearInterval(intervalId);
     }, challenge.clickTime - 100);
@@ -131,6 +131,21 @@ function generateBox(count) {
     gameScreen.appendChild(box);
     //works even though the box is already placed on the dom, which is pleasantly suprising
     box.style.animation = "fadeOut linear ".concat(challenge.clickTime, "ms");
+}
+function hpLost() {
+    updateHP("HP: ".concat(currentHP - 1));
+    var hpLost = document.createElement("p");
+    hpLost.classList.add("hpLost");
+    hpLost.textContent = "-1";
+    if (window.innerWidth > 1440) {
+        hpLost.style.left = (190 + ((window.innerWidth - 1440) / 2)) + (Math.random() * 20 - 10) + "px";
+    }
+    else {
+        hpLost.style.left = 190 + (Math.random() * 20 - 10) + "px";
+    }
+    hpLost.style.top = (90 + (Math.random() * 10 - 5)) + "px";
+    gameScreen.appendChild(hpLost);
+    setTimeout(function () { return gameScreen.removeChild(hpLost); }, 900);
 }
 function pointGained() {
     updatePoints("Points: ".concat(currentPoints + 1));

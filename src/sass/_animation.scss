@@ -27,3 +27,13 @@
         translate: 0 -30px;
     }
 }
+
+@keyframes hpLost {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        translate: 0 30px;
+    }
+}

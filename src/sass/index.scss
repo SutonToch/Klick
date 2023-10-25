@@ -168,3 +168,10 @@ button:active {
   font-size: 1.4rem;
   animation: pointGained linear 1s;
 }
+
+.hpLost {
+  position: absolute;
+  font-size: 1.4rem;
+  color: red;
+  animation: hpLost linear 1s;
+}
