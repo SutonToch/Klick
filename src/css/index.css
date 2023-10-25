@@ -1,10 +1,50 @@
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes boxClicked {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    rotate: 480deg;
+    translate: 0 -120px;
+  }
+}
+@keyframes pointGained {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 -30px;
+  }
+}
+@keyframes hpLost {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 30px;
+  }
+}
+@font-face {
+  src: url("../assets/fonts/Aldrich-Regular.ttf");
+  font-family: "Aldrich-Regular";
+}
 * {
   box-sizing: border-box;
   margin: 0;
 }
 
 :root {
-  font-family: sans-serif;
+  font-family: "Aldrich-Regular";
   color-scheme: light dark;
   color: hsl(0, 0%, 90%);
   background-color: hsl(0, 0%, 10%);
@@ -22,6 +62,29 @@ body {
 
 img {
   max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 10%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+h1 {
+  text-shadow: 3px 3px 3px hsl(0, 0%, 30%);
+}
+
+button:hover, button:focus {
+  opacity: 0.8;
+  outline: 2px solid hsl(0, 0%, 90%);
+}
+
+button:active {
+  translate: 0 1px;
 }
 
 .hide {
@@ -45,16 +108,11 @@ img {
   background-color: hsl(0, 0%, 7%);
   border-radius: 10px;
   padding: 0.5em 1em 1em;
+  box-shadow: 0px 0px 30px hsl(0, 0%, 30%);
 }
 .start-screen button {
-  font-size: inherit;
-  color: hsl(0, 0%, 90%);
-  background-color: hsl(0, 0%, 10%);
   margin: 1em 0em;
   padding: 0.3em 1.5em;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 }
 .start-screen .start-screen-settings {
   display: flex;
@@ -73,20 +131,15 @@ img {
   background-color: hsl(0, 0%, 7%);
   border-radius: 10px;
   padding: 1em;
+  box-shadow: 0px 0px 30px hsl(0, 0%, 30%);
 }
 .gameover-screen h2 {
   margin-top: 0.5em;
   font-size: 2rem;
 }
 .gameover-screen button {
-  font-size: inherit;
-  color: hsl(0, 0%, 90%);
-  background-color: hsl(0, 0%, 10%);
   margin-top: 2em;
   padding: 0.3em 1.5em;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
 .box {
@@ -96,24 +149,20 @@ img {
   cursor: pointer;
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
 .settings-bar {
   padding: 1em;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .info-bar {
   display: flex;
   width: 100%;
+  max-width: 1440px;
   justify-content: space-between;
   align-self: flex-start;
-  padding: 0em 3em;
+  padding: 0 3em;
+  margin: 0 auto;
   font-size: 2rem;
 }
 
@@ -132,6 +181,24 @@ img {
   margin-left: auto;
   padding: 6px;
   cursor: pointer;
+}
+
+.audio-mute:hover, .audio-mute:focus {
+  opacity: 0.8;
+  outline: 2px solid hsl(0, 0%, 90%);
+}
+
+.pointGained {
+  position: absolute;
+  font-size: 1.4rem;
+  animation: pointGained linear 1s;
+}
+
+.hpLost {
+  position: absolute;
+  font-size: 1.4rem;
+  color: red;
+  animation: hpLost linear 1s;
 }
 
 /*# sourceMappingURL=index.css.map */

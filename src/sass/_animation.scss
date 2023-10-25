@@ -1,0 +1,39 @@
+@keyframes fadeOut {
+    0% {
+      opacity: 1
+    }
+    100% {
+      opacity: 0
+    }
+}
+
+@keyframes boxClicked {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        rotate: 480deg;
+        translate: 0 -120px;
+    }
+}
+
+@keyframes pointGained {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        translate: 0 -30px;
+    }
+}
+
+@keyframes hpLost {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        translate: 0 30px;
+    }
+}
