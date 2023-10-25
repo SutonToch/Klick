@@ -138,10 +138,10 @@ function pointGained() {
     pointGained.classList.add("pointGained");
     pointGained.textContent = "+1";
     if (window.innerWidth > 1440) {
-        pointGained.style.left = (1595 + (Math.random() * 20 - 10)) + "px";
+        pointGained.style.left = (window.innerWidth - 90 - ((window.innerWidth - 1440) / 2)) + (Math.random() * 20 - 10) + "px";
     }
     else {
-        pointGained.style.left = window.innerWidth + "px";
+        pointGained.style.left = (window.innerWidth - 90) + (Math.random() * 20 - 10) + "px";
     }
     pointGained.style.top = (90 + (Math.random() * 10 - 5)) + "px";
     gameScreen.appendChild(pointGained);
