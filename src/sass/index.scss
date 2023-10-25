@@ -35,6 +35,21 @@ img {
 
 button {
   font-family: inherit;
+  font-size: inherit;
+  color: var.$clr-font-color;
+  background-color: var.$clr-background;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+h1 {
+  text-shadow: 2px 2px 2px var.$clr-text-shadow;
+}
+
+button:hover, button:focus {
+  opacity: 0.8;
+  outline: 2px solid var.$clr-font-color;
 }
 
 .hide {
@@ -60,17 +75,8 @@ button {
   padding: 0.5em 1em 1em;
 
   button {
-      font-size: inherit;
-      color: var.$clr-font-color;
-
-      background-color: var.$clr-background;
-
       margin: 1em 0em;
       padding: 0.3em 1.5em;
-
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
   }
 
   .start-screen-settings {
@@ -98,17 +104,8 @@ button {
   }
 
   button {
-      font-size: inherit;
-      color: var.$clr-font-color;
-
-      background-color: var.$clr-background;
-
       margin-top: 2em;
       padding: 0.3em 1.5em;
-
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
   }
 }
 
@@ -157,4 +154,9 @@ button {
   margin-left: auto;
   padding: 6px;
   cursor: pointer;
+}
+
+.audio-mute:hover, .audio-mute:focus {
+  opacity: 0.8;
+  outline: 2px solid var.$clr-font-color;
 }

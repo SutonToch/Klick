@@ -30,6 +30,21 @@ img {
 
 button {
   font-family: inherit;
+  font-size: inherit;
+  color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 10%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+h1 {
+  text-shadow: 2px 2px 2px hsl(0, 0%, 40%);
+}
+
+button:hover, button:focus {
+  opacity: 0.8;
+  outline: 2px solid hsl(0, 0%, 90%);
 }
 
 .hide {
@@ -55,14 +70,8 @@ button {
   padding: 0.5em 1em 1em;
 }
 .start-screen button {
-  font-size: inherit;
-  color: hsl(0, 0%, 90%);
-  background-color: hsl(0, 0%, 10%);
   margin: 1em 0em;
   padding: 0.3em 1.5em;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 }
 .start-screen .start-screen-settings {
   display: flex;
@@ -87,14 +96,8 @@ button {
   font-size: 2rem;
 }
 .gameover-screen button {
-  font-size: inherit;
-  color: hsl(0, 0%, 90%);
-  background-color: hsl(0, 0%, 10%);
   margin-top: 2em;
   padding: 0.3em 1.5em;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
 .box {
@@ -140,6 +143,11 @@ button {
   margin-left: auto;
   padding: 6px;
   cursor: pointer;
+}
+
+.audio-mute:hover, .audio-mute:focus {
+  opacity: 0.8;
+  outline: 2px solid hsl(0, 0%, 90%);
 }
 
 /*# sourceMappingURL=index.css.map */
