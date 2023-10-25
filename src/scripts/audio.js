@@ -3,14 +3,18 @@ export var gainPointsAudio = new Audio("./src/assets/message-incoming-universfie
 export var loseHPAudio = new Audio("./src/assets/video-game-hit-noise-001-pixabay-EdR.mp3");
 var audioMute = document.getElementsByClassName("audio-mute");
 var audioMuteImg = document.getElementsByClassName("audio-mute-img");
+var userInteracted = false;
 window.addEventListener("load", function () {
     backgroundAudio.loop = true;
     manageMuted(true);
-    backgroundAudio.play();
 });
 for (var _i = 0, _a = audioMute; _i < _a.length; _i++) {
     var element = _a[_i];
     element.addEventListener("click", function () {
+        if (!userInteracted) {
+            backgroundAudio.play();
+            userInteracted = true;
+        }
         for (var _i = 0, _a = audioMuteImg; _i < _a.length; _i++) {
             var img = _a[_i];
             if (img.src.includes("Off")) {
