@@ -122,7 +122,7 @@ function gameOver() {
     stopWorker()
 
     for(let i=gameScreen.children.length-1; i>1; i--) {
-        clearInterval(timeoutIds[Number(gameScreen.children[i].id)])
+        clearTimeout(timeoutIds[Number(gameScreen.children[i].id)])
         gameScreen.children[i].remove()
     }
 }
@@ -143,19 +143,18 @@ function generateBox(count: string) {
         ${Math.floor(Math.random()*100)}%
     )`
 
-    const intervalId = setInterval(() => {
+    const timeoutId = setTimeout(() => {
         loseHPAudio.play()
         hpLost()
         gameScreen.removeChild(box)
-        clearInterval(intervalId)
     }, challenge.clickTime - 100)
 
-    timeoutIds[Number(count)] = intervalId
+    timeoutIds[Number(count)] = timeoutId
 
     box.addEventListener("click", function boxClicked() {
         const endTime = performance.now()
         gainPointsAudio.play()
-        clearInterval(intervalId)
+        clearTimeout(timeoutId)
 
         pointGained()
 
@@ -207,7 +206,13 @@ function pointGained() {
 
     pointGained.style.top = (90 + (Math.random()*10-5)) + "px"
     gameScreen.appendChild(pointGained)
-    setTimeout(() => gameScreen.removeChild(pointGained), 900)
+    setTimeout(() => {
+        //If gameover occurs during this timeout, the gameover handler removes all children, 
+        //including 'pointGained' -> that's why this check is necessary
+        if(gameScreen.children.length > 0) {
+            gameScreen.removeChild(pointGained)
+        }
+    }, 900)
 }
 
 function adjustChallenge(timeUntilClickMs: number) {
