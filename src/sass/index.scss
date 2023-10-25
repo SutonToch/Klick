@@ -162,3 +162,9 @@ button:active {
   opacity: 0.8;
   outline: 2px solid var.$clr-font-color;
 }
+
+.pointGained {
+  position: absolute;
+  font-size: 1.4rem;
+  animation: pointGained linear 1s;
+}

@@ -17,3 +17,13 @@
         translate: 0 -120px;
     }
 }
+
+@keyframes pointGained {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        translate: 0 -30px;
+    }
+}

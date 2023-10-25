@@ -105,8 +105,8 @@ function generateBox(count) {
     var box = document.createElement("div");
     box.classList.add("box");
     box.setAttribute("id", count.toString());
-    box.style.top = (154 + Math.floor(Math.random() * (window.innerHeight - 154 - 150))).toString() + "px";
-    box.style.left = (50 + window.innerWidth * 0.1 + Math.floor(Math.random() * (window.innerWidth - 200 - (window.innerWidth * 0.2)))).toString() + "px";
+    box.style.top = (154 + Math.floor(Math.random() * (window.innerHeight - 154 - 150))) + "px";
+    box.style.left = (50 + window.innerWidth * 0.1 + Math.floor(Math.random() * (window.innerWidth - 200 - (window.innerWidth * 0.2)))) + "px";
     box.style.width = (Math.floor(Math.random() * 50) + 50).toString() + "px";
     box.style.height = (Math.floor(Math.random() * 50) + 50).toString() + "px";
     box.style.backgroundColor = "hsl(\n        ".concat(Math.floor(Math.random() * 360), ",\n        ").concat(Math.floor(Math.random() * 100), "%,\n        ").concat(Math.floor(Math.random() * 100), "%\n    )");
@@ -120,8 +120,8 @@ function generateBox(count) {
     box.addEventListener("click", function boxClicked() {
         var endTime = performance.now();
         gainPointsAudio.play();
-        updatePoints("Points: ".concat(currentPoints + 1));
         clearInterval(intervalId);
+        pointGained();
         box.removeEventListener('click', boxClicked);
         box.style.animation = "boxClicked linear 0.8s";
         setTimeout(function () { return gameScreen.removeChild(box); }, 700);
@@ -131,6 +131,21 @@ function generateBox(count) {
     gameScreen.appendChild(box);
     //works even though the box is already placed on the dom, which is pleasantly suprising
     box.style.animation = "fadeOut linear ".concat(challenge.clickTime, "ms");
+}
+function pointGained() {
+    updatePoints("Points: ".concat(currentPoints + 1));
+    var pointGained = document.createElement("p");
+    pointGained.classList.add("pointGained");
+    pointGained.textContent = "+1";
+    if (window.innerWidth > 1440) {
+        pointGained.style.left = (1595 + (Math.random() * 20 - 10)) + "px";
+    }
+    else {
+        pointGained.style.left = window.innerWidth + "px";
+    }
+    pointGained.style.top = (90 + (Math.random() * 10 - 5)) + "px";
+    gameScreen.appendChild(pointGained);
+    setTimeout(function () { return gameScreen.removeChild(pointGained); }, 900);
 }
 function adjustChallenge(timeUntilClickMs) {
     if (currentPoints > 150) {

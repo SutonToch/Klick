@@ -16,6 +16,15 @@
     translate: 0 -120px;
   }
 }
+@keyframes pointGained {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 -30px;
+  }
+}
 @font-face {
   src: url("../assets/fonts/Aldrich-Regular.ttf");
   font-family: "Aldrich-Regular";
@@ -168,6 +177,12 @@ button:active {
 .audio-mute:hover, .audio-mute:focus {
   opacity: 0.8;
   outline: 2px solid hsl(0, 0%, 90%);
+}
+
+.pointGained {
+  position: absolute;
+  font-size: 1.4rem;
+  animation: pointGained linear 1s;
 }
 
 /*# sourceMappingURL=index.css.map */
