@@ -7,17 +7,19 @@ export const loseHPAudio: HTMLAudioElement
 
 const audioMute = document.getElementsByClassName("audio-mute")
 const audioMuteImg = document.getElementsByClassName("audio-mute-img")
+let userInteracted = false 
 
 window.addEventListener("load", () => {
     backgroundAudio.loop = true
-    
     manageMuted(true)
-
-    backgroundAudio.play()
 })
 
 for(const element of audioMute as any as HTMLElement[]) {
     element.addEventListener("click", () => {
+        if(!userInteracted) {
+            backgroundAudio.play()
+            userInteracted = true;
+        }
         for(const img of audioMuteImg as any as HTMLImageElement[]) {
             if(img.src.includes("Off")) {
                 img.src = "src/assets/Picol-Picol-Speaker-Louder.256.png"
