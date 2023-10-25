@@ -39,12 +39,16 @@ button {
 }
 
 h1 {
-  text-shadow: 2px 2px 2px hsl(0, 0%, 40%);
+  text-shadow: 3px 3px 3px hsl(0, 0%, 30%);
 }
 
 button:hover, button:focus {
   opacity: 0.8;
   outline: 2px solid hsl(0, 0%, 90%);
+}
+
+button:active {
+  translate: 0 1px;
 }
 
 .hide {
@@ -68,6 +72,7 @@ button:hover, button:focus {
   background-color: hsl(0, 0%, 7%);
   border-radius: 10px;
   padding: 0.5em 1em 1em;
+  box-shadow: 0px 0px 30px hsl(0, 0%, 30%);
 }
 .start-screen button {
   margin: 1em 0em;
@@ -90,6 +95,7 @@ button:hover, button:focus {
   background-color: hsl(0, 0%, 7%);
   border-radius: 10px;
   padding: 1em;
+  box-shadow: 0px 0px 30px hsl(0, 0%, 30%);
 }
 .gameover-screen h2 {
   margin-top: 0.5em;
@@ -117,14 +123,18 @@ button:hover, button:focus {
 }
 .settings-bar {
   padding: 1em;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .info-bar {
   display: flex;
   width: 100%;
+  max-width: 1440px;
   justify-content: space-between;
   align-self: flex-start;
-  padding: 0em 3em;
+  padding: 0 3em;
+  margin: 0 auto;
   font-size: 2rem;
 }
 

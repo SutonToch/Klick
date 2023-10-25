@@ -44,12 +44,16 @@ button {
 }
 
 h1 {
-  text-shadow: 2px 2px 2px var.$clr-text-shadow;
+  text-shadow: 3px 3px 3px var.$clr-text-shadow;
 }
 
 button:hover, button:focus {
   opacity: 0.8;
   outline: 2px solid var.$clr-font-color;
+}
+
+button:active {
+  translate: 0 1px;
 }
 
 .hide {
@@ -73,6 +77,7 @@ button:hover, button:focus {
   background-color: var.$clr-start-screen;
   border-radius: 10px;
   padding: 0.5em 1em 1em;
+  box-shadow: 0px 0px 30px var.$clr-text-shadow;
 
   button {
       margin: 1em 0em;
@@ -97,6 +102,7 @@ button:hover, button:focus {
   background-color: var.$clr-start-screen;
   border-radius: 10px;
   padding: 1em;
+  box-shadow: 0px 0px 30px var.$clr-text-shadow;
 
   h2 {
       margin-top: 0.5em;
@@ -128,14 +134,18 @@ button:hover, button:focus {
 
 .settings-bar {
   padding: 1em;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .info-bar {
   display: flex;
   width: 100%;
+  max-width: 1440px;
   justify-content: space-between;
   align-self: flex-start;
-  padding: 0em 3em;
+  padding: 0 3em;
+  margin: 0 auto;
   font-size: 2rem;
 }
 
