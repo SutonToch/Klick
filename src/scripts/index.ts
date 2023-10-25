@@ -35,32 +35,32 @@ let challenge : ChallengeObject = {
 }
 let timeoutIds:NodeJS.Timeout[] = []
 
-// TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
-//       would remove one Event Listener here
-startGameBtn.addEventListener("click", () => {
-    startScreenContainer.classList.remove("flex")
-    gameScreen.classList.remove("hide")
-    settingsBar.classList.remove("hide")
 
-    startScreenContainer.classList.add("hide")
-    gameScreen.classList.add("flex")
-    settingsBar.classList.add("flex")
+startGameBtn.addEventListener("click", () => {
+    toggleVisibilityClass(startScreenContainer)
+    toggleVisibilityClass(gameScreen)
+    toggleVisibilityClass(settingsBar)
 
     setupGame()
 })
 
 startNewGameBtn.addEventListener("click", () => {
-    gameoverScreenContainer.classList.remove("flex")
-    gameScreen.classList.remove("hide")
-    settingsBar.classList.remove("hide")
-
-    gameoverScreenContainer.classList.add("hide")
-    gameScreen.classList.add("flex")
-    settingsBar.classList.add("flex")
+    toggleVisibilityClass(gameoverScreenContainer)
+    toggleVisibilityClass(gameScreen)
+    toggleVisibilityClass(settingsBar)
 
     setupGame()
 })
 
+function toggleVisibilityClass(container:Element) {
+    if(container.classList.contains("hide")) {
+        container.classList.remove("hide")
+        container.classList.add("flex")
+    } else {
+        container.classList.remove("flex")
+        container.classList.add("hide")
+    }
+}
 
 function setupGame() {
     currentHP = defaultHPValue
@@ -84,19 +84,36 @@ function updateHP(infoBarHPText : string) {
     }
 }
 
-function gameOver() {
-    gameScreen.classList.remove("flex")
-    gameoverScreenContainer.classList.remove("hide")
-    settingsBar.classList.remove("flex")
+function startWorker() {
+    if(worker == undefined) {
+        worker = new Worker("./src/scripts/worker.js", {type: "module"})
+        worker.postMessage(4000 / challenge.current)
+    }
+    worker.onmessage = (msg) => generateBox(msg.data)
+}
 
-    gameScreen.classList.add("hide")
-    gameoverScreenContainer.classList.add("flex")
-    settingsBar.classList.add("hide")
+function updatePoints(infoBarPointsText : string) {
+    currentPoints = Number(infoBarPointsText.replace("Points: ", ""))
+    pointsElement.textContent = infoBarPointsText
+}
+
+function stopWorker() {
+    if(worker == undefined) {
+        return
+    }
+    worker.terminate()
+    worker = undefined
+}
+
+function gameOver() {
+    toggleVisibilityClass(gameScreen)
+    toggleVisibilityClass(settingsBar)
+    toggleVisibilityClass(gameoverScreenContainer)
 
     let highscore : number = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0
     if(currentPoints > highscore) {
         highscore = currentPoints
-        localStorage.setItem("highscore", JSON.stringify(currentPoints))
+        localStorage.setItem("highscore", currentPoints.toString())
     }
 
     endPointsElement.textContent = `Points: ${currentPoints}`
@@ -108,27 +125,6 @@ function gameOver() {
         clearInterval(timeoutIds[Number(gameScreen.children[i].id)])
         gameScreen.children[i].remove()
     }
-}
-
-function stopWorker() {
-    if(worker == undefined) {
-        return
-    }
-    worker.terminate()
-    worker = undefined
-}
-
-function updatePoints(infoBarPointsText : string) {
-    currentPoints = Number(infoBarPointsText.replace("Points: ", ""))
-    pointsElement.textContent = infoBarPointsText
-}
-
-function startWorker() {
-    if(worker == undefined) {
-        worker = new Worker("./src/scripts/worker.js", {type: "module"})
-        worker.postMessage(4000 / challenge.current)
-    }
-    worker.onmessage = (msg) => generateBox(msg.data)
 }
 
 function generateBox(count: string) {
@@ -234,5 +230,4 @@ function adjustChallenge(timeUntilClickMs: number) {
     challenge.spawnTime = 4000 / challenge.current
     challenge.clickTime = challenge.spawnTime * 4
     worker?.postMessage(challenge.spawnTime)
-
 }

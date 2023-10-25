@@ -24,26 +24,28 @@ var challenge = {
     clickTime: 8000
 };
 var timeoutIds = [];
-// TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
-//       would remove one Event Listener here
 startGameBtn.addEventListener("click", function () {
-    startScreenContainer.classList.remove("flex");
-    gameScreen.classList.remove("hide");
-    settingsBar.classList.remove("hide");
-    startScreenContainer.classList.add("hide");
-    gameScreen.classList.add("flex");
-    settingsBar.classList.add("flex");
+    toggleVisibilityClass(startScreenContainer);
+    toggleVisibilityClass(gameScreen);
+    toggleVisibilityClass(settingsBar);
     setupGame();
 });
 startNewGameBtn.addEventListener("click", function () {
-    gameoverScreenContainer.classList.remove("flex");
-    gameScreen.classList.remove("hide");
-    settingsBar.classList.remove("hide");
-    gameoverScreenContainer.classList.add("hide");
-    gameScreen.classList.add("flex");
-    settingsBar.classList.add("flex");
+    toggleVisibilityClass(gameoverScreenContainer);
+    toggleVisibilityClass(gameScreen);
+    toggleVisibilityClass(settingsBar);
     setupGame();
 });
+function toggleVisibilityClass(container) {
+    if (container.classList.contains("hide")) {
+        container.classList.remove("hide");
+        container.classList.add("flex");
+    }
+    else {
+        container.classList.remove("flex");
+        container.classList.add("hide");
+    }
+}
 function setupGame() {
     currentHP = defaultHPValue;
     currentPoints = defaultPointsValue;
@@ -63,25 +65,16 @@ function updateHP(infoBarHPText) {
         gameOver();
     }
 }
-function gameOver() {
-    gameScreen.classList.remove("flex");
-    gameoverScreenContainer.classList.remove("hide");
-    settingsBar.classList.remove("flex");
-    gameScreen.classList.add("hide");
-    gameoverScreenContainer.classList.add("flex");
-    settingsBar.classList.add("hide");
-    var highscore = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0;
-    if (currentPoints > highscore) {
-        highscore = currentPoints;
-        localStorage.setItem("highscore", JSON.stringify(currentPoints));
+function startWorker() {
+    if (worker == undefined) {
+        worker = new Worker("./src/scripts/worker.js", { type: "module" });
+        worker.postMessage(4000 / challenge.current);
     }
-    endPointsElement.textContent = "Points: ".concat(currentPoints);
-    highscoreElement.textContent = "Highscore: ".concat(highscore);
-    stopWorker();
-    for (var i = gameScreen.children.length - 1; i > 1; i--) {
-        clearInterval(timeoutIds[Number(gameScreen.children[i].id)]);
-        gameScreen.children[i].remove();
-    }
+    worker.onmessage = function (msg) { return generateBox(msg.data); };
+}
+function updatePoints(infoBarPointsText) {
+    currentPoints = Number(infoBarPointsText.replace("Points: ", ""));
+    pointsElement.textContent = infoBarPointsText;
 }
 function stopWorker() {
     if (worker == undefined) {
@@ -90,16 +83,22 @@ function stopWorker() {
     worker.terminate();
     worker = undefined;
 }
-function updatePoints(infoBarPointsText) {
-    currentPoints = Number(infoBarPointsText.replace("Points: ", ""));
-    pointsElement.textContent = infoBarPointsText;
-}
-function startWorker() {
-    if (worker == undefined) {
-        worker = new Worker("./src/scripts/worker.js", { type: "module" });
-        worker.postMessage(4000 / challenge.current);
+function gameOver() {
+    toggleVisibilityClass(gameScreen);
+    toggleVisibilityClass(settingsBar);
+    toggleVisibilityClass(gameoverScreenContainer);
+    var highscore = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0;
+    if (currentPoints > highscore) {
+        highscore = currentPoints;
+        localStorage.setItem("highscore", currentPoints.toString());
     }
-    worker.onmessage = function (msg) { return generateBox(msg.data); };
+    endPointsElement.textContent = "Points: ".concat(currentPoints);
+    highscoreElement.textContent = "Highscore: ".concat(highscore);
+    stopWorker();
+    for (var i = gameScreen.children.length - 1; i > 1; i--) {
+        clearInterval(timeoutIds[Number(gameScreen.children[i].id)]);
+        gameScreen.children[i].remove();
+    }
 }
 function generateBox(count) {
     var box = document.createElement("div");
