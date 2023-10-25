@@ -156,12 +156,17 @@ function generateBox(count: string) {
 
     timeoutIds[Number(count)] = intervalId
 
-    box.addEventListener("click", () => {
+    box.addEventListener("click", function boxClicked() {
         const endTime = performance.now()
         gainPointsAudio.play()
         updatePoints(`Points: ${currentPoints+1}`)
         clearInterval(intervalId)
-        gameScreen.removeChild(box)
+
+        box.removeEventListener('click', boxClicked)
+
+        box.style.animation = "boxClicked linear 0.8s"
+        setTimeout(() => gameScreen.removeChild(box), 700)
+
         adjustChallenge(endTime-startTime)
     })
 

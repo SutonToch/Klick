@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use 'animation' as anim;
 
 @font-face {
   src: url('../assets/fonts/Aldrich-Regular.ttf');
@@ -121,15 +122,6 @@ button:active {
   border: 2px solid white;
   opacity: 1;
   cursor: pointer;
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1
-  }
-  100% {
-    opacity: 0
-  }
 }
 
 .settings-bar {

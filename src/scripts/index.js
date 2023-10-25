@@ -117,12 +117,14 @@ function generateBox(count) {
         clearInterval(intervalId);
     }, challenge.clickTime - 100);
     timeoutIds[Number(count)] = intervalId;
-    box.addEventListener("click", function () {
+    box.addEventListener("click", function boxClicked() {
         var endTime = performance.now();
         gainPointsAudio.play();
         updatePoints("Points: ".concat(currentPoints + 1));
         clearInterval(intervalId);
-        gameScreen.removeChild(box);
+        box.removeEventListener('click', boxClicked);
+        box.style.animation = "boxClicked linear 0.8s";
+        setTimeout(function () { return gameScreen.removeChild(box); }, 700);
         adjustChallenge(endTime - startTime);
     });
     var startTime = performance.now();

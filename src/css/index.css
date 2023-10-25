@@ -1,3 +1,21 @@
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes boxClicked {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    rotate: 480deg;
+    translate: 0 -120px;
+  }
+}
 @font-face {
   src: url("../assets/fonts/Aldrich-Regular.ttf");
   font-family: "Aldrich-Regular";
@@ -113,14 +131,6 @@ button:active {
   cursor: pointer;
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
 .settings-bar {
   padding: 1em;
   max-width: 1600px;

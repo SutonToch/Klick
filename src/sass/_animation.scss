@@ -1,0 +1,19 @@
+@keyframes fadeOut {
+    0% {
+      opacity: 1
+    }
+    100% {
+      opacity: 0
+    }
+}
+
+@keyframes boxClicked {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        rotate: 480deg;
+        translate: 0 -120px;
+    }
+}
