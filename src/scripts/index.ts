@@ -180,8 +180,11 @@ function hpLost() {
     hpLost.classList.add("hpLost")
     hpLost.textContent = "-1"
 
-    if(window.innerWidth > 1440) {
-        hpLost.style.left = (190+((window.innerWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    const windowWidth = window.innerWidth
+    if(windowWidth > 1440) {
+        hpLost.style.left = (190+((windowWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    } else if(windowWidth < 600) {
+        hpLost.style.left = (70 + 60) + (Math.random()*20-10) + "px"
     } else {
         hpLost.style.left = 190 + (Math.random()*20-10) + "px"
     }
@@ -198,10 +201,13 @@ function pointGained() {
     pointGained.classList.add("pointGained")
     pointGained.textContent = "+1"
 
-    if(window.innerWidth > 1440) {
-        pointGained.style.left = (window.innerWidth-90-((window.innerWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    const windowWidth = window.innerWidth
+    if(windowWidth > 1440) {
+        pointGained.style.left = (windowWidth-90-((windowWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    } else if(windowWidth < 600) {
+        pointGained.style.left = (windowWidth-70) + (Math.random()*20-10) + "px"
     } else {
-        pointGained.style.left = (window.innerWidth-90) + (Math.random()*20-10) + "px"
+        pointGained.style.left = (windowWidth-90) + (Math.random()*20-10) + "px"
     }
 
     pointGained.style.top = (90 + (Math.random()*10-5)) + "px"
