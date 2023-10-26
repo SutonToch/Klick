@@ -12,8 +12,13 @@
     <!-- Start Screen -->
     <div class="start-screen-container flex">
       <div class="start-screen">
-        <div class="img-container audio-mute">
-          <img class="audio-mute-img" src="src/assets/Picol-Picol-Speaker-Off.256.png" alt="loudspeaker off">
+        <div class="settings-screen-bar">
+          <div class="img-container display-info">
+            <img class="info-img" src="src/assets/icons/icons8-info-50.png" alt="info icon">
+          </div>
+          <div class="img-container audio-mute">
+            <img class="audio-mute-img" src="src/assets/icons/Picol-Picol-Speaker-Off.256.png" alt="loudspeaker off">
+          </div>
         </div>
         <h1>Klick</h1>
         <button class="start-game-btn">Start Game</button>
@@ -22,18 +27,38 @@
     <!-- Game Over Screen -->
     <div class="gameover-screen-container hide">
       <div class="gameover-screen">
-          <div class="img-container audio-mute">
-            <img class="audio-mute-img" src="src/assets/Picol-Picol-Speaker-Off.256.png" alt="loudspeaker off">
+        <div class="settings-screen-bar">
+          <div class="img-container display-info">
+            <img class="info-img" src="src/assets/icons/icons8-info-50.png" alt="info icon">
           </div>
+          <div class="img-container audio-mute">
+            <img class="audio-mute-img" src="src/assets/icons/Picol-Picol-Speaker-Off.256.png" alt="loudspeaker off">
+          </div>
+        </div>
           <h1>Game Over</h1>
           <h2 class="end-points"></h2>
           <h2 class="highscore"></h2>
           <button class="start-new-game-btn">New Game</button>
       </div>
     </div>
+    <!-- Info Screen -->
+    <div class="info-screen-container hide">
+      <div class="info-screen">
+        <div class="img-container close-info">x</div>
+        <h2 class="text-center">Acknowledgments</h2>
+        <p><b>Idea, Design, Programming:</b> Paul Pfütze (SutonToch)</p>
+        <p><b>Background Music:</b> 'Seven Years' by Keyframe Audio (modified)</p>
+        <p><b>Soundeffects</b> by Pixabay and Universfield (modified)</p>
+        <p><b><a href="https://fonts.google.com/specimen/Aldrich" target="_blank">Font-Family:</a></b> 'Aldrich' by MADType</p>
+        <p><b><a href="https://www.iconarchive.com/show/picol-icons-by-picol.3.html" target="_blank">Sound-Icons</a></b> by Picol Team (modified)</p>
+        <p><b><a href="https://icons8.com/icon/77/info" target="_blank">Info-Icon</a></b> by <a target="_blank" href="https://icons8.com">Icons8</a></p>
+        <p><a href="https://github.com/SutonToch/Klick" target="_blank">GitHub</a></p>
+        <h3 class="text-center">Thanks for making this project possible!</h3>
+      </div>
+    </div>
     <header class="settings-bar hide">
       <div class="img-container audio-mute">
-        <img class="audio-mute-img" src="src/assets/Picol-Picol-Speaker-Off.256.png" alt="loudspeaker off">
+        <img class="audio-mute-img" src="src/assets/icons/Picol-Picol-Speaker-Off.256.png" alt="loudspeaker off">
       </div>
     </header>
     <main class="game-screen hide">

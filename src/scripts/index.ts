@@ -11,6 +11,7 @@ const startScreenContainer = document.getElementsByClassName("start-screen-conta
 const gameScreen = document.getElementsByClassName("game-screen")[0]
 const gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0]
 const settingsBar = document.getElementsByClassName("settings-bar")[0]
+const infoScreenContainer = document.getElementsByClassName("info-screen-container")[0]
 
 // ELEMENTS to manipulate content
 const hpElement = document.getElementsByClassName("hp")[0]
@@ -21,6 +22,9 @@ const highscoreElement = document.getElementsByClassName("highscore")[0]
 // BUTTONS & Elements that get Event Listeners
 const startGameBtn = document.getElementsByClassName("start-game-btn")[0]
 const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0]
+const displayInfo = document.getElementsByClassName("display-info")
+const closeInfo = document.getElementsByClassName("close-info")[0]
+let containerToRestoreOnCloseInfo : Element 
 
 // Variables for logic
 const defaultHPValue = 3
@@ -35,32 +39,47 @@ let challenge : ChallengeObject = {
 }
 let timeoutIds:NodeJS.Timeout[] = []
 
-// TODO: Consolidating startScreenContainer and gameoverScreenContainer into one,
-//       would remove one Event Listener here
-startGameBtn.addEventListener("click", () => {
-    startScreenContainer.classList.remove("flex")
-    gameScreen.classList.remove("hide")
-    settingsBar.classList.remove("hide")
 
-    startScreenContainer.classList.add("hide")
-    gameScreen.classList.add("flex")
-    settingsBar.classList.add("flex")
+startGameBtn.addEventListener("click", () => {
+    toggleVisibilityClass(startScreenContainer)
+    toggleVisibilityClass(gameScreen)
+    toggleVisibilityClass(settingsBar)
 
     setupGame()
 })
 
 startNewGameBtn.addEventListener("click", () => {
-    gameoverScreenContainer.classList.remove("flex")
-    gameScreen.classList.remove("hide")
-    settingsBar.classList.remove("hide")
-
-    gameoverScreenContainer.classList.add("hide")
-    gameScreen.classList.add("flex")
-    settingsBar.classList.add("flex")
+    toggleVisibilityClass(gameoverScreenContainer)
+    toggleVisibilityClass(gameScreen)
+    toggleVisibilityClass(settingsBar)
 
     setupGame()
 })
 
+for(const element of displayInfo as any as HTMLElement[]) {
+    const container = element.parentElement?.parentElement?.parentElement
+    container ? 
+    element.addEventListener("click", () => {
+        toggleVisibilityClass(infoScreenContainer)
+        toggleVisibilityClass(container)
+        containerToRestoreOnCloseInfo = container
+    }) : console.log("something went wrong")
+}
+
+closeInfo.addEventListener("click", () => {
+    toggleVisibilityClass(infoScreenContainer)
+    toggleVisibilityClass(containerToRestoreOnCloseInfo)
+})
+
+function toggleVisibilityClass(container:Element) {
+    if(container.classList.contains("hide")) {
+        container.classList.remove("hide")
+        container.classList.add("flex")
+    } else {
+        container.classList.remove("flex")
+        container.classList.add("hide")
+    }
+}
 
 function setupGame() {
     currentHP = defaultHPValue
@@ -84,30 +103,17 @@ function updateHP(infoBarHPText : string) {
     }
 }
 
-function gameOver() {
-    gameScreen.classList.remove("flex")
-    gameoverScreenContainer.classList.remove("hide")
-    settingsBar.classList.remove("flex")
-
-    gameScreen.classList.add("hide")
-    gameoverScreenContainer.classList.add("flex")
-    settingsBar.classList.add("hide")
-
-    let highscore : number = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0
-    if(currentPoints > highscore) {
-        highscore = currentPoints
-        localStorage.setItem("highscore", JSON.stringify(currentPoints))
+function startWorker() {
+    if(worker == undefined) {
+        worker = new Worker("./src/scripts/worker.js", {type: "module"})
+        worker.postMessage(4000 / challenge.current)
     }
+    worker.onmessage = (msg) => generateBox(msg.data)
+}
 
-    endPointsElement.textContent = `Points: ${currentPoints}`
-    highscoreElement.textContent = `Highscore: ${highscore}`
-
-    stopWorker()
-
-    for(let i=gameScreen.children.length-1; i>1; i--) {
-        clearInterval(timeoutIds[Number(gameScreen.children[i].id)])
-        gameScreen.children[i].remove()
-    }
+function updatePoints(infoBarPointsText : string) {
+    currentPoints = Number(infoBarPointsText.replace("Points: ", ""))
+    pointsElement.textContent = infoBarPointsText
 }
 
 function stopWorker() {
@@ -118,17 +124,26 @@ function stopWorker() {
     worker = undefined
 }
 
-function updatePoints(infoBarPointsText : string) {
-    currentPoints = Number(infoBarPointsText.replace("Points: ", ""))
-    pointsElement.textContent = infoBarPointsText
-}
+function gameOver() {
+    toggleVisibilityClass(gameScreen)
+    toggleVisibilityClass(settingsBar)
+    toggleVisibilityClass(gameoverScreenContainer)
 
-function startWorker() {
-    if(worker == undefined) {
-        worker = new Worker("./src/scripts/worker.js", {type: "module"})
-        worker.postMessage(4000 / challenge.current)
+    let highscore : number = localStorage.getItem("highscore") ? Number(localStorage.getItem("highscore")) : 0
+    if(currentPoints > highscore) {
+        highscore = currentPoints
+        localStorage.setItem("highscore", currentPoints.toString())
     }
-    worker.onmessage = (msg) => generateBox(msg.data)
+
+    endPointsElement.textContent = `Points: ${currentPoints}`
+    highscoreElement.textContent = `Highscore: ${highscore}`
+
+    stopWorker()
+
+    for(let i=gameScreen.children.length-1; i>1; i--) {
+        clearTimeout(timeoutIds[Number(gameScreen.children[i].id)])
+        gameScreen.children[i].remove()
+    }
 }
 
 function generateBox(count: string) {
@@ -147,19 +162,18 @@ function generateBox(count: string) {
         ${Math.floor(Math.random()*100)}%
     )`
 
-    const intervalId = setInterval(() => {
+    const timeoutId = setTimeout(() => {
         loseHPAudio.play()
         hpLost()
         gameScreen.removeChild(box)
-        clearInterval(intervalId)
     }, challenge.clickTime - 100)
 
-    timeoutIds[Number(count)] = intervalId
+    timeoutIds[Number(count)] = timeoutId
 
     box.addEventListener("click", function boxClicked() {
         const endTime = performance.now()
         gainPointsAudio.play()
-        clearInterval(intervalId)
+        clearTimeout(timeoutId)
 
         pointGained()
 
@@ -185,8 +199,11 @@ function hpLost() {
     hpLost.classList.add("hpLost")
     hpLost.textContent = "-1"
 
-    if(window.innerWidth > 1440) {
-        hpLost.style.left = (190+((window.innerWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    const windowWidth = window.innerWidth
+    if(windowWidth > 1440) {
+        hpLost.style.left = (190+((windowWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    } else if(windowWidth < 600) {
+        hpLost.style.left = (70 + 60) + (Math.random()*20-10) + "px"
     } else {
         hpLost.style.left = 190 + (Math.random()*20-10) + "px"
     }
@@ -203,15 +220,24 @@ function pointGained() {
     pointGained.classList.add("pointGained")
     pointGained.textContent = "+1"
 
-    if(window.innerWidth > 1440) {
-        pointGained.style.left = (window.innerWidth-90-((window.innerWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    const windowWidth = window.innerWidth
+    if(windowWidth > 1440) {
+        pointGained.style.left = (windowWidth-90-((windowWidth-1440)/2)) + (Math.random()*20-10) + "px"
+    } else if(windowWidth < 600) {
+        pointGained.style.left = (windowWidth-70) + (Math.random()*20-10) + "px"
     } else {
-        pointGained.style.left = (window.innerWidth-90) + (Math.random()*20-10) + "px"
+        pointGained.style.left = (windowWidth-90) + (Math.random()*20-10) + "px"
     }
 
     pointGained.style.top = (90 + (Math.random()*10-5)) + "px"
     gameScreen.appendChild(pointGained)
-    setTimeout(() => gameScreen.removeChild(pointGained), 900)
+    setTimeout(() => {
+        //If gameover occurs during this timeout, the gameover handler removes all children, 
+        //including 'pointGained' -> that's why this check is necessary
+        if(gameScreen.children.length > 0) {
+            gameScreen.removeChild(pointGained)
+        }
+    }, 900)
 }
 
 function adjustChallenge(timeUntilClickMs: number) {
@@ -234,5 +260,4 @@ function adjustChallenge(timeUntilClickMs: number) {
     challenge.spawnTime = 4000 / challenge.current
     challenge.clickTime = challenge.spawnTime * 4
     worker?.postMessage(challenge.spawnTime)
-
 }
