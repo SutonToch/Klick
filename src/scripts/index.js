@@ -1,9 +1,11 @@
+var _a, _b;
 import { gainPointsAudio, loseHPAudio } from "./audio.js";
 // CONTAINERS to show and hide
 var startScreenContainer = document.getElementsByClassName("start-screen-container")[0];
 var gameScreen = document.getElementsByClassName("game-screen")[0];
 var gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0];
 var settingsBar = document.getElementsByClassName("settings-bar")[0];
+var infoScreenContainer = document.getElementsByClassName("info-screen-container")[0];
 // ELEMENTS to manipulate content
 var hpElement = document.getElementsByClassName("hp")[0];
 var pointsElement = document.getElementsByClassName("points")[0];
@@ -12,6 +14,9 @@ var highscoreElement = document.getElementsByClassName("highscore")[0];
 // BUTTONS & Elements that get Event Listeners
 var startGameBtn = document.getElementsByClassName("start-game-btn")[0];
 var startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0];
+var displayInfo = document.getElementsByClassName("display-info");
+var closeInfo = document.getElementsByClassName("close-info")[0];
+var containerToRestoreOnCloseInfo;
 // Variables for logic
 var defaultHPValue = 3;
 var defaultPointsValue = 0;
@@ -35,6 +40,23 @@ startNewGameBtn.addEventListener("click", function () {
     toggleVisibilityClass(gameScreen);
     toggleVisibilityClass(settingsBar);
     setupGame();
+});
+var _loop_1 = function (element) {
+    var container = (_b = (_a = element.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.parentElement;
+    container ?
+        element.addEventListener("click", function () {
+            toggleVisibilityClass(infoScreenContainer);
+            toggleVisibilityClass(container);
+            containerToRestoreOnCloseInfo = container;
+        }) : console.log("something went wrong");
+};
+for (var _i = 0, _c = displayInfo; _i < _c.length; _i++) {
+    var element = _c[_i];
+    _loop_1(element);
+}
+closeInfo.addEventListener("click", function () {
+    toggleVisibilityClass(infoScreenContainer);
+    toggleVisibilityClass(containerToRestoreOnCloseInfo);
 });
 function toggleVisibilityClass(container) {
     if (container.classList.contains("hide")) {

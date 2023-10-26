@@ -11,6 +11,7 @@ const startScreenContainer = document.getElementsByClassName("start-screen-conta
 const gameScreen = document.getElementsByClassName("game-screen")[0]
 const gameoverScreenContainer = document.getElementsByClassName("gameover-screen-container")[0]
 const settingsBar = document.getElementsByClassName("settings-bar")[0]
+const infoScreenContainer = document.getElementsByClassName("info-screen-container")[0]
 
 // ELEMENTS to manipulate content
 const hpElement = document.getElementsByClassName("hp")[0]
@@ -21,6 +22,9 @@ const highscoreElement = document.getElementsByClassName("highscore")[0]
 // BUTTONS & Elements that get Event Listeners
 const startGameBtn = document.getElementsByClassName("start-game-btn")[0]
 const startNewGameBtn = document.getElementsByClassName("start-new-game-btn")[0]
+const displayInfo = document.getElementsByClassName("display-info")
+const closeInfo = document.getElementsByClassName("close-info")[0]
+let containerToRestoreOnCloseInfo : Element 
 
 // Variables for logic
 const defaultHPValue = 3
@@ -50,6 +54,21 @@ startNewGameBtn.addEventListener("click", () => {
     toggleVisibilityClass(settingsBar)
 
     setupGame()
+})
+
+for(const element of displayInfo as any as HTMLElement[]) {
+    const container = element.parentElement?.parentElement?.parentElement
+    container ? 
+    element.addEventListener("click", () => {
+        toggleVisibilityClass(infoScreenContainer)
+        toggleVisibilityClass(container)
+        containerToRestoreOnCloseInfo = container
+    }) : console.log("something went wrong")
+}
+
+closeInfo.addEventListener("click", () => {
+    toggleVisibilityClass(infoScreenContainer)
+    toggleVisibilityClass(containerToRestoreOnCloseInfo)
 })
 
 function toggleVisibilityClass(container:Element) {
