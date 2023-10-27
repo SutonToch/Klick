@@ -1,4 +1,4 @@
-import { gainPointsAudio, loseHPAudio } from "./audio.js"
+import { gainPointsAudio, loseHPAudio, adjustAudio } from "./audio.js"
 
 interface ChallengeObject {
     current: number,
@@ -90,6 +90,7 @@ function setupGame() {
         clickTime: 8000
     }
 
+    adjustAudio(0.015)
     updateHP("HP: " + currentHP)
     updatePoints("Points: " + currentPoints)
     startWorker()
@@ -105,7 +106,7 @@ function updateHP(infoBarHPText : string) {
 
 function startWorker() {
     if(worker == undefined) {
-        worker = new Worker("./src/scripts/worker.js", {type: "module"})
+        worker = new Worker("./src/scripts/js/worker.js", {type: "module"})
         worker.postMessage(4000 / challenge.current)
     }
     worker.onmessage = (msg) => generateBox(msg.data)
@@ -144,6 +145,8 @@ function gameOver() {
         clearTimeout(timeoutIds[Number(gameScreen.children[i].id)])
         gameScreen.children[i].remove()
     }
+
+    adjustAudio(-0.015)
 }
 
 function generateBox(count: string) {
