@@ -105,7 +105,7 @@ function updateHP(infoBarHPText : string) {
 
 function startWorker() {
     if(worker == undefined) {
-        worker = new Worker("./src/scripts/worker.js", {type: "module"})
+        worker = new Worker("./src/scripts/js/worker.js", {type: "module"})
         worker.postMessage(4000 / challenge.current)
     }
     worker.onmessage = (msg) => generateBox(msg.data)
