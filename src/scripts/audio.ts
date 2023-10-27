@@ -7,7 +7,8 @@ export const loseHPAudio: HTMLAudioElement
 
 const audioMute = document.getElementsByClassName("audio-mute")
 const audioMuteImg = document.getElementsByClassName("audio-mute-img")
-let userInteracted = false 
+let userInteracted = false
+let backgroundAudioVolume : number = 0.02
 
 window.addEventListener("load", () => {
     backgroundAudio.loop = true
@@ -38,8 +39,14 @@ function manageMuted(isMuted:boolean) {
         gainPointsAudio.volume = 0
         loseHPAudio.volume = 0
     } else if(!isMuted) {
-        backgroundAudio.volume = 0.03
-        gainPointsAudio.volume = 0.01
-        loseHPAudio.volume = 0.02
+        backgroundAudio.volume = backgroundAudioVolume
+        gainPointsAudio.volume = 0.006
+        loseHPAudio.volume = 0.025
     }
+}
+
+export function adjustAudio(adjustment:number) {
+    backgroundAudioVolume = backgroundAudioVolume + adjustment
+    backgroundAudio.volume = backgroundAudioVolume 
+    console.log(backgroundAudio.volume)
 }

@@ -1,4 +1,4 @@
-import { gainPointsAudio, loseHPAudio } from "./audio.js"
+import { gainPointsAudio, loseHPAudio, adjustAudio } from "./audio.js"
 
 interface ChallengeObject {
     current: number,
@@ -90,6 +90,7 @@ function setupGame() {
         clickTime: 8000
     }
 
+    adjustAudio(0.015)
     updateHP("HP: " + currentHP)
     updatePoints("Points: " + currentPoints)
     startWorker()
@@ -144,6 +145,8 @@ function gameOver() {
         clearTimeout(timeoutIds[Number(gameScreen.children[i].id)])
         gameScreen.children[i].remove()
     }
+
+    adjustAudio(-0.015)
 }
 
 function generateBox(count: string) {

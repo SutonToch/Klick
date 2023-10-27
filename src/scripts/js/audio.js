@@ -4,6 +4,7 @@ export var loseHPAudio = new Audio("./src/assets/audio/video-game-hit-noise-001-
 var audioMute = document.getElementsByClassName("audio-mute");
 var audioMuteImg = document.getElementsByClassName("audio-mute-img");
 var userInteracted = false;
+var backgroundAudioVolume = 0.02;
 window.addEventListener("load", function () {
     backgroundAudio.loop = true;
     manageMuted(true);
@@ -35,8 +36,13 @@ function manageMuted(isMuted) {
         loseHPAudio.volume = 0;
     }
     else if (!isMuted) {
-        backgroundAudio.volume = 0.03;
-        gainPointsAudio.volume = 0.01;
-        loseHPAudio.volume = 0.02;
+        backgroundAudio.volume = backgroundAudioVolume;
+        gainPointsAudio.volume = 0.006;
+        loseHPAudio.volume = 0.025;
     }
+}
+export function adjustAudio(adjustment) {
+    backgroundAudioVolume = backgroundAudioVolume + adjustment;
+    backgroundAudio.volume = backgroundAudioVolume;
+    console.log(backgroundAudio.volume);
 }

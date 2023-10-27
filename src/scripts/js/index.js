@@ -1,5 +1,5 @@
 var _a, _b;
-import { gainPointsAudio, loseHPAudio } from "./audio.js";
+import { gainPointsAudio, loseHPAudio, adjustAudio } from "./audio.js";
 // CONTAINERS to show and hide
 var startScreenContainer = document.getElementsByClassName("start-screen-container")[0];
 var gameScreen = document.getElementsByClassName("game-screen")[0];
@@ -76,6 +76,7 @@ function setupGame() {
         spawnTime: 2000,
         clickTime: 8000
     };
+    adjustAudio(0.015);
     updateHP("HP: " + currentHP);
     updatePoints("Points: " + currentPoints);
     startWorker();
@@ -121,6 +122,7 @@ function gameOver() {
         clearTimeout(timeoutIds[Number(gameScreen.children[i].id)]);
         gameScreen.children[i].remove();
     }
+    adjustAudio(-0.015);
 }
 function generateBox(count) {
     var box = document.createElement("div");
