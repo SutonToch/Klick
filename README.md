@@ -20,4 +20,4 @@ This game should contain some kind of 'levels', each highlighting something diff
   - hover over a box for a certain amount of time
   - clicking a certain amount of time in quick succession
 
-[Click me to play the Game!][https://sutontoch.github.io/Klick/]
+Link to the Game: https://sutontoch.github.io/Klick/
